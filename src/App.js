@@ -39,6 +39,7 @@ class App extends Component {
                 <Pokemon
                     {...this.state.pokemon}
                     hidden={this.state.hidden}
+                    zoom={6}
                 />
             </div>
         );

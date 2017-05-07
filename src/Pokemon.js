@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 
 
-const SPRITE_HEIGHT = 96,
-      ZOOM = 6;
+const SPRITE_HEIGHT = 96;
 
 function rgbToHex({r, g, b}) {
     r = r.toString(16);
@@ -62,7 +61,8 @@ export default class Pokemon extends Component {
                     } else {
                         context.fillStyle = (spriteData[i][j] || 'rgba(0,0,0,0.0)');
                     }
-                    context.fillRect(i * ZOOM, j * ZOOM, ZOOM, ZOOM);
+                    let zoom = _this.props.zoom || 1;
+                    context.fillRect(i * zoom, j * zoom, zoom, zoom);
                 }
             }
         };
@@ -77,9 +77,16 @@ export default class Pokemon extends Component {
     }
 
     render() {
+        let zoom = this.props.zoom || 1,
+            dimension = zoom * SPRITE_HEIGHT;
+
         return (
             <div>
-                <canvas width={576} height={576} ref="canvas" />
+                <canvas
+                    width={dimension}
+                    height={dimension}
+                    ref="canvas"
+                />
             </div>
         );
     }
