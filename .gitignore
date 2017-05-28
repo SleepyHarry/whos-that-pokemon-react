@@ -18,3 +18,5 @@ yarn-error.log*
 
 # PyCharm
 .idea
+.idea/
+.idea/*
