@@ -11,7 +11,7 @@ class App extends Component {
 
         this.state = {
             pokemon: this.randPoke(),
-            hidden: false,
+            hidden: true,
 
             currentGuess: '',
         };
@@ -42,13 +42,29 @@ class App extends Component {
 
     onSubmit() {
         if (this.state.currentGuess.toLowerCase() === this.state.pokemon.name) {
-            alert('correct!');
             this.setState({
-                pokemon: this.randPoke(),
-                currentGuess: '',
+                hidden: false,
             });
+
+            setTimeout(
+                () => {
+                    this.setState({
+                        hidden: true,
+                        currentGuess: '',
+                        pokemon: this.randPoke(),
+                    });
+                    this.guessInput.focus();
+                },
+                2000,
+            );
         } else {
-            alert('nope!');
+            // TODO
+        }
+    }
+
+    onKeyUp(e) {
+        if (e.key === "Enter") {
+            this.onSubmit();
         }
     }
 
@@ -59,16 +75,17 @@ class App extends Component {
                     <Button onClick={this.newPoke.bind(this)}>
                         Shuffle
                     </Button>
-                    <Button onClick={this.toggleHidden.bind(this)}>
-                        {this.state.hidden ? 'Reveal' : 'Hide'}
-                    </Button>
                 </Col>
                 <Col xs={4}>
                     <FormGroup validationState={null}>
                         <FormControl
                             type="text"
+                            value={this.state.currentGuess}
                             placeholder="Your guess"
+                            inputRef={(input) => { this.guessInput = input; }}
                             onChange={this.onChange.bind(this)}
+                            onKeyUp={this.onKeyUp.bind(this)}
+                            disabled={!this.state.hidden}
                         />
                     </FormGroup>
                 </Col>
