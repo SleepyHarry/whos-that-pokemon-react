@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import PropTypes from 'prop-types';
 
 const SPRITE_HEIGHT = 96;
 
@@ -22,19 +22,31 @@ function pad(num) {
 
 
 export default class Pokemon extends Component {
+    static propTypes = {
+        generation: PropTypes.number.isRequired,
+        number: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+
+        hidden: PropTypes.bool.isRequired,
+        zoom: PropTypes.number,
+    };
+
     drawPoke() {
         let _this = this;
 
         const canvas = this.refs.canvas,
             context = canvas.getContext('2d');
 
-        let pokeImg = new Image();
+        let pokeImg = new window.Image();
         pokeImg.src = `/sprites/${pad(this.props.number)}.png`;
 
         pokeImg.onload = function () {
             context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(this, 0, 0, SPRITE_HEIGHT, SPRITE_HEIGHT,
-                0, 0, SPRITE_HEIGHT, SPRITE_HEIGHT);
+            context.drawImage(
+                this,
+                0, 0, SPRITE_HEIGHT, SPRITE_HEIGHT,
+                0, 0, SPRITE_HEIGHT, SPRITE_HEIGHT,
+            );
 
             let imgData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
@@ -47,6 +59,7 @@ export default class Pokemon extends Component {
                     let i = (y * canvas.width + x) * 4;
 
                     spriteData[x][y] = (
+                        // imgData[i + 3] is the "alpha" component
                         imgData[i + 3] ? rgbToHex({r: imgData[i], b: imgData[i + 1], g: imgData[i + 2]}) : null
                     );
                 }
@@ -57,6 +70,7 @@ export default class Pokemon extends Component {
             for (let i = 0; i < SPRITE_HEIGHT; i++) {
                 for (let j = 0; j < SPRITE_HEIGHT; j++) {
                     if (_this.props.hidden) {
+                        // grey if hidden
                         context.fillStyle = ((spriteData[i][j] && 'rgb(64,64,64)') || 'rgba(0,0,0,0.0)');
                     } else {
                         context.fillStyle = (spriteData[i][j] || 'rgba(0,0,0,0.0)');

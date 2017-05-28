@@ -6,7 +6,10 @@
     "react-scripts": "0.9.5"
   },
   "dependencies": {
+    "ms": "^2.0.0",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
+    "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4"
   },
   "scripts": {

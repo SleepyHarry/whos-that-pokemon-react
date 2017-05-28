@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
+import {Button} from 'react-bootstrap';
 import './App.css';
 
 import names from './names.json';
 import Pokemon from "./Pokemon";
 
 class App extends Component {
+    randPoke() {
+        // TODO: Generation filtering
+        return names[Math.floor(Math.random() * 151)];
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
-            pokemon: names[Math.floor(Math.random() * 151)],
+            pokemon: this.randPoke(),
             hidden: false,
         };
     }
@@ -21,21 +27,20 @@ class App extends Component {
     }
 
     newPoke() {
-        // TODO: Generation filtering
         this.setState({
-            pokemon: names[Math.floor(Math.random() * 151)],
+            pokemon: this.randPoke(),
         });
     }
 
     render() {
         return (
             <div>
-                <button onClick={this.newPoke.bind(this)}>
+                <Button onClick={this.newPoke.bind(this)}>
                     shuffle
-                </button>
-                <button onClick={this.toggleHidden.bind(this)}>
+                </Button>
+                <Button onClick={this.toggleHidden.bind(this)}>
                     {this.state.hidden ? 'reveal' : 'hide'}
-                </button>
+                </Button>
                 <Pokemon
                     {...this.state.pokemon}
                     hidden={this.state.hidden}
