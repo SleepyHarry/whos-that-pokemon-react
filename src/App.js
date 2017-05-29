@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Col, FormControl, FormGroup} from "react-bootstrap";
+import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
 import "./App.css";
 
 import names from "./names.json";
@@ -101,50 +101,54 @@ class App extends Component {
 
     render() {
         return (
-            <div>
-                <Col xs={3}>
-                    <Button onClick={this.newPoke.bind(this)}>
-                        Shuffle (cost: 1 point)
-                    </Button>
-                </Col>
-                <Col xs={3}>
-                    <h2>{this.state.points} points!</h2>
-                </Col>
-                <Col xs={4}>
-                    <FormGroup validationState={null}>
-                        <FormControl
-                            type="text"
-                            value={this.state.currentGuess}
-                            placeholder="Your guess"
-                            inputRef={(input) => { this.guessInput = input; }}
-                            onChange={this.onChange.bind(this)}
-                            onKeyUp={this.onKeyUp.bind(this)}
-                            disabled={!this.state.hidden}
-                        />
-                    </FormGroup>
-                </Col>
-                <Col xs={2}>
-                    <Button
-                        type="submit"
-                        onClick={this.onSubmit.bind(this)}
-                    >
-                        Guess
-                    </Button>
-                </Col>
-                <Col xs={10}>
-                    {this.state.loading ? null :
-                    <Pokemon
-                        {...this.state.pokemon}
-                        hidden={this.state.hidden}
-                        zoom={6}
-                    />}
-                </Col>
-                <Col xs={2}>
-                    {this.state.status ?
-                    <StatusBox option={this.state.status}/> :
-                    null}
-                </Col>
-            </div>
+            <Grid>
+                <Row>
+                    <Col xs={3}>
+                        <Button onClick={this.newPoke.bind(this)}>
+                            Shuffle (cost: 1 point)
+                        </Button>
+                    </Col>
+                    <Col xs={3}>
+                        <h2>{this.state.points} points!</h2>
+                    </Col>
+                    <Col xs={4}>
+                        <FormGroup validationState={null}>
+                            <FormControl
+                                type="text"
+                                value={this.state.currentGuess}
+                                placeholder="Your guess"
+                                inputRef={(input) => { this.guessInput = input; }}
+                                onChange={this.onChange.bind(this)}
+                                onKeyUp={this.onKeyUp.bind(this)}
+                                disabled={!this.state.hidden}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col xs={2}>
+                        <Button
+                            type="submit"
+                            onClick={this.onSubmit.bind(this)}
+                        >
+                            Guess
+                        </Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={10}>
+                        {this.state.loading ? null :
+                        <Pokemon
+                            {...this.state.pokemon}
+                            hidden={this.state.hidden}
+                            zoom={6}
+                        />}
+                    </Col>
+                    <Col xs={2}>
+                        {this.state.status ?
+                        <StatusBox option={this.state.status}/> :
+                        null}
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
 }
