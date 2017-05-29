@@ -4,6 +4,7 @@ import "./App.css";
 
 import names from "./names.json";
 import Pokemon from "./Pokemon";
+import StatusBox from "./StatusBox";
 
 class App extends Component {
     constructor(props) {
@@ -18,6 +19,7 @@ class App extends Component {
 
             currentGuess: '',
             points: 0,
+            status: null,
         };
 
         this.randPoke = this.randPoke.bind(this);
@@ -31,10 +33,14 @@ class App extends Component {
     }
 
     newPoke() {
-        this.setState((prevState) => ({
-            points: prevState.points - 1,
-            pokemon: this.randPoke(),
-        }));
+        if (this.state.points === 0) {
+            // TODO: say no
+        } else {
+            this.setState((prevState) => ({
+                points: prevState.points - 1,
+                pokemon: this.randPoke(),
+            }));
+        }
     }
 
     randPoke() {
@@ -56,6 +62,7 @@ class App extends Component {
     onChange(e) {
         this.setState({
             currentGuess: e.target.value,
+            status: null,
         });
     }
 
@@ -64,6 +71,7 @@ class App extends Component {
             this.setState((prevState) => ({
                 points: prevState.points + 1,
                 hidden: false,
+                status: "correct",
             }));
 
             setTimeout(
@@ -72,13 +80,16 @@ class App extends Component {
                         hidden: true,
                         currentGuess: '',
                         pokemon: this.randPoke(),
+                        status: null,
                     });
                     this.guessInput.focus();
                 },
                 2000,
             );
         } else {
-            // TODO
+            this.setState({
+                status: "nope",
+            });
         }
     }
 
@@ -120,12 +131,19 @@ class App extends Component {
                         Guess
                     </Button>
                 </Col>
-                {this.state.loading ? null :
-                <Pokemon
-                    {...this.state.pokemon}
-                    hidden={this.state.hidden}
-                    zoom={6}
-                />}
+                <Col xs={10}>
+                    {this.state.loading ? null :
+                    <Pokemon
+                        {...this.state.pokemon}
+                        hidden={this.state.hidden}
+                        zoom={6}
+                    />}
+                </Col>
+                <Col xs={2}>
+                    {this.state.status ?
+                    <StatusBox option={this.state.status}/> :
+                    null}
+                </Col>
             </div>
         );
     }
