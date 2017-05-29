@@ -10,28 +10,47 @@ class App extends Component {
         super(props);
 
         this.state = {
-            pokemon: this.randPoke(),
+            loading: true,
+
+            potentials: names.filter(poke => poke.generation === 1),
+            // pokemon: this.randPoke(),
             hidden: true,
 
             currentGuess: '',
+            points: 0,
         };
+
+        this.randPoke = this.randPoke.bind(this);
     }
 
-    toggleHidden() {
-        this.setState(prevState => ({
-            hidden: !prevState.hidden,
-        }));
+    componentDidMount() {
+        this.setState({
+            pokemon: this.randPoke(),
+            loading: false,
+        });
     }
 
     newPoke() {
-        this.setState({
+        this.setState((prevState) => ({
+            points: prevState.points - 1,
             pokemon: this.randPoke(),
-        });
+        }));
     }
 
     randPoke() {
         // TODO: Generation filtering
-        return names[Math.floor(Math.random() * 151)];
+        // TODO: What if empty
+        const n = this.state.potentials.length,
+            i = Math.floor(Math.random() * n),
+            newPoke = this.state.potentials[i];
+
+        this.setState({
+            potentials: [
+                ...this.state.potentials.slice(0, i),
+                ...this.state.potentials.slice(i + 1, n),
+            ],
+        });
+        return newPoke;
     }
 
     onChange(e) {
@@ -42,9 +61,10 @@ class App extends Component {
 
     onSubmit() {
         if (this.state.currentGuess.toLowerCase() === this.state.pokemon.name) {
-            this.setState({
+            this.setState((prevState) => ({
+                points: prevState.points + 1,
                 hidden: false,
-            });
+            }));
 
             setTimeout(
                 () => {
@@ -71,10 +91,13 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Col xs={6}>
+                <Col xs={3}>
                     <Button onClick={this.newPoke.bind(this)}>
-                        Shuffle
+                        Shuffle (cost: 1 point)
                     </Button>
+                </Col>
+                <Col xs={3}>
+                    <h2>{this.state.points} points!</h2>
                 </Col>
                 <Col xs={4}>
                     <FormGroup validationState={null}>
@@ -97,11 +120,12 @@ class App extends Component {
                         Guess
                     </Button>
                 </Col>
+                {this.state.loading ? null :
                 <Pokemon
                     {...this.state.pokemon}
                     hidden={this.state.hidden}
                     zoom={6}
-                />
+                />}
             </div>
         );
     }
