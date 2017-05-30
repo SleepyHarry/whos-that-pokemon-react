@@ -100,8 +100,15 @@ class App extends Component {
         });
     }
 
+    generousMatch(s1, s2) {
+        s1 = s1.toLowerCase().replace(/[^a-z]/g, '');
+        s2 = s2.toLowerCase().replace(/[^a-z]/g, '');
+
+        return s1 === s2;
+    }
+
     onSubmit() {
-        if (this.state.currentGuess.toLowerCase() === this.state.pokemon.name) {
+        if (this.generousMatch(this.state.currentGuess, this.state.pokemon.name)) {
             this.setState((prevState) => ({
                 points: prevState.points + 1,
                 hidden: false,
