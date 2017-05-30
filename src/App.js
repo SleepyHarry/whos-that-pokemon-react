@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
+import {Button, Checkbox, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
 import "./App.css";
 
 import names from "./names.json";
@@ -13,7 +13,8 @@ class App extends Component {
         this.state = {
             loading: true,
 
-            potentials: names.filter(poke => poke.generation === 1),
+            potentials: names,//.filter(poke => poke.generation === 1),
+            generations: new Set(names.map(poke => poke.generation)),
             // pokemon: this.randPoke(),
             hidden: true,
 
@@ -21,6 +22,8 @@ class App extends Component {
             points: 0,
             status: null,
         };
+
+        this.generations = new Array(...this.state.generations).sort();
 
         this.randPoke = this.randPoke.bind(this);
     }
@@ -34,7 +37,9 @@ class App extends Component {
 
     newPoke() {
         if (this.state.points === 0) {
-            // TODO: say no
+            this.setState({
+                status: "forbidden",
+            });
         } else {
             this.setState((prevState) => ({
                 points: prevState.points - 1,
@@ -43,19 +48,27 @@ class App extends Component {
         }
     }
 
-    randPoke() {
-        // TODO: Generation filtering
-        // TODO: What if empty
-        const n = this.state.potentials.length,
+    randPokeFromPotentials(potentials) {
+        const n = potentials.length,
             i = Math.floor(Math.random() * n),
-            newPoke = this.state.potentials[i];
+            newPoke = potentials[i];
 
-        this.setState({
-            potentials: [
-                ...this.state.potentials.slice(0, i),
-                ...this.state.potentials.slice(i + 1, n),
-            ],
-        });
+        potentials = [
+            ...potentials.slice(0, i),
+            ...potentials.slice(i + 1, n),
+        ];
+
+        return {
+            newPoke,
+            potentials,
+        };
+    }
+
+    randPoke() {
+        // TODO: What if empty
+        let {newPoke, potentials} = this.randPokeFromPotentials(this.state.potentials);
+
+        this.setState({potentials});
         return newPoke;
     }
 
@@ -63,6 +76,27 @@ class App extends Component {
         this.setState({
             currentGuess: e.target.value,
             status: null,
+        });
+    }
+
+    onGenerationSelect(gen, e) {
+        const checked = e.target.checked;  // to avoid persisting the event
+
+        this.setState((prevState) => {
+            let generations = prevState.generations;
+
+            checked ? generations.add(gen) : generations.delete(gen);
+
+            let fullPotentials = names
+                .filter(poke => generations.has(poke.generation));
+
+            let {newPoke, potentials} = this.randPokeFromPotentials(fullPotentials);
+
+            return {
+                generations,
+                potentials,
+                pokemon: newPoke,
+            };
         });
     }
 
@@ -146,6 +180,21 @@ class App extends Component {
                         {this.state.status ?
                         <StatusBox option={this.state.status}/> :
                         null}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={12}>
+                        <FormGroup>
+                            {this.generations.map(gen =>
+                            <Checkbox
+                                key={gen}
+                                inline
+                                checked={this.state.generations.has(gen)}
+                                onChange={this.onGenerationSelect.bind(this, gen)}
+                            >
+                                Gen {gen}
+                            </Checkbox>)}
+                        </FormGroup>
                     </Col>
                 </Row>
             </Grid>

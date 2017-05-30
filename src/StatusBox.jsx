@@ -13,6 +13,11 @@ const options = {
         icon: "times",
         text: "Nope!",
     },
+    forbidden: {
+        color: "red",
+        icon: "exclamation-triangle",
+        text: "Not enough points!",
+    }
 };
 
 
