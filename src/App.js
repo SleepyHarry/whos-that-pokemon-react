@@ -109,7 +109,7 @@ class App extends Component {
                         </Button>
                     </Col>
                     <Col xs={3}>
-                        <h2>{this.state.points} points!</h2>
+                        <h2>{this.state.points} point{this.state.points === 1 ? "": "s"}!</h2>
                     </Col>
                     <Col xs={4}>
                         <FormGroup validationState={null}>
