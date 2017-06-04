@@ -73,16 +73,16 @@ export default class Pokemon extends Component {
 
             context.clearRect(0, 0, canvas.width, canvas.height);
 
-            for (let i = 0; i < SPRITE_HEIGHT; i++) {
-                for (let j = 0; j < SPRITE_HEIGHT; j++) {
+            for (let x = 0; x < SPRITE_HEIGHT; x++) {
+                for (let y = 0; y < SPRITE_HEIGHT; y++) {
                     if (_this.props.hidden) {
                         // grey if hidden
-                        context.fillStyle = ((spriteData[i][j] && GREY) || TRANSPARENT);
+                        context.fillStyle = ((spriteData[x][y] && GREY) || TRANSPARENT);
                     } else {
-                        context.fillStyle = (spriteData[i][j] || TRANSPARENT);
+                        context.fillStyle = (spriteData[x][y] || TRANSPARENT);
                     }
                     let zoom = _this.props.zoom;
-                    context.fillRect(i * zoom, j * zoom, zoom, zoom);
+                    context.fillRect(x * zoom, y * zoom, zoom, zoom);
                 }
             }
         };
