@@ -31,6 +31,10 @@ export default class Pokemon extends Component {
         zoom: PropTypes.number,
     };
 
+    static defaultProps = {
+        zoom: 1,
+    };
+
     drawPoke() {
         let _this = this;
 
@@ -75,7 +79,7 @@ export default class Pokemon extends Component {
                     } else {
                         context.fillStyle = (spriteData[i][j] || 'rgba(0,0,0,0.0)');
                     }
-                    let zoom = _this.props.zoom || 1;
+                    let zoom = _this.props.zoom;
                     context.fillRect(i * zoom, j * zoom, zoom, zoom);
                 }
             }
@@ -91,7 +95,7 @@ export default class Pokemon extends Component {
     }
 
     render() {
-        let zoom = this.props.zoom || 1,
+        let zoom = this.props.zoom,
             dimension = zoom * SPRITE_HEIGHT;
 
         return (
