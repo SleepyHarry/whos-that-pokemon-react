@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-const SPRITE_HEIGHT = 96;
+const SPRITE_HEIGHT = 96,
+    GREY = "rgb(64, 64, 64)",
+    TRANSPARENT = "rgba(0, 0, 0, 0)";
 
 function rgbToHex({r, g, b}) {
     r = r.toString(16);
@@ -75,9 +77,9 @@ export default class Pokemon extends Component {
                 for (let j = 0; j < SPRITE_HEIGHT; j++) {
                     if (_this.props.hidden) {
                         // grey if hidden
-                        context.fillStyle = ((spriteData[i][j] && 'rgb(64,64,64)') || 'rgba(0,0,0,0.0)');
+                        context.fillStyle = ((spriteData[i][j] && GREY) || TRANSPARENT);
                     } else {
-                        context.fillStyle = (spriteData[i][j] || 'rgba(0,0,0,0.0)');
+                        context.fillStyle = (spriteData[i][j] || TRANSPARENT);
                     }
                     let zoom = _this.props.zoom;
                     context.fillRect(i * zoom, j * zoom, zoom, zoom);
