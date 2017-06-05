@@ -17,6 +17,7 @@ class App extends Component {
             generations: new Set(names.map(poke => poke.generation)),
             // pokemon: this.randPoke(),
             hidden: true,
+            reveal: new Set(),
 
             currentGuess: '',
             points: 0,
@@ -96,6 +97,7 @@ class App extends Component {
                 generations,
                 potentials,
                 pokemon: newPoke,
+                reveal: new Set(),
             };
         });
     }
@@ -112,6 +114,7 @@ class App extends Component {
             this.setState((prevState) => ({
                 points: prevState.points + 1,
                 hidden: false,
+                reveal: new Set(),
                 status: "correct",
             }));
 
@@ -138,6 +141,24 @@ class App extends Component {
         if (e.key === "Enter") {
             this.onSubmit();
         }
+    }
+
+    onClickToReveal({x, y}) {
+        // TODO: Dynamic radius (based on difficulty? increasing? based on points spent?)
+
+        const radius = 5;
+
+        this.setState((prevState) => {
+            for (let xDiff=-radius; xDiff<=radius; xDiff++) {
+                for (let yDiff=-radius; yDiff<=radius; yDiff++) {
+                    if (Math.sqrt(xDiff**2 + yDiff**2) <= radius) {
+                        prevState.reveal.add([x + xDiff, y + yDiff]+'');
+                    }
+                }
+            }
+
+            return prevState;
+        });
     }
 
     render() {
@@ -181,6 +202,8 @@ class App extends Component {
                             {...this.state.pokemon}
                             hidden={this.state.hidden}
                             zoom={6}
+                            reveal={this.state.reveal}
+                            onClick={this.onClickToReveal.bind(this)}
                         />}
                     </Col>
                     <Col xs={2}>

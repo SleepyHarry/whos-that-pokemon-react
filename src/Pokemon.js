@@ -30,11 +30,17 @@ export default class Pokemon extends Component {
         name: PropTypes.string.isRequired,
 
         hidden: PropTypes.bool.isRequired,
+        reveal: PropTypes.instanceOf(Set),
         zoom: PropTypes.number,
+
+        onClick: PropTypes.func,
     };
 
     static defaultProps = {
+        reveal: new Set(),
         zoom: 1,
+
+        onClick: (() => {}),
     };
 
     drawPoke() {
@@ -75,7 +81,7 @@ export default class Pokemon extends Component {
 
             for (let x = 0; x < SPRITE_HEIGHT; x++) {
                 for (let y = 0; y < SPRITE_HEIGHT; y++) {
-                    if (_this.props.hidden) {
+                    if (_this.props.hidden && !_this.props.reveal.has([x, y]+'')) {
                         // grey if hidden
                         context.fillStyle = ((spriteData[x][y] && GREY) || TRANSPARENT);
                     } else {
@@ -96,6 +102,14 @@ export default class Pokemon extends Component {
         this.drawPoke();
     }
 
+    onClick(e) {
+        const rect = e.target.getBoundingClientRect(),
+            x = Math.floor((e.clientX - rect.left) / this.props.zoom),
+            y = Math.floor((e.clientY - rect.top) / this.props.zoom);
+
+        this.props.onClick({x, y});
+    }
+
     render() {
         let zoom = this.props.zoom,
             dimension = zoom * SPRITE_HEIGHT;
@@ -106,6 +120,7 @@ export default class Pokemon extends Component {
                     width={dimension}
                     height={dimension}
                     ref="canvas"
+                    onClick={this.onClick.bind(this)}
                 />
             </div>
         );
