@@ -6,6 +6,14 @@ import names from "./names.json";
 import Pokemon from "./Pokemon";
 import StatusBox from "./StatusBox";
 
+const points = {
+    CORRECT: 10,
+    WRONG: -0,
+    SKIP: -5,
+    REVEAL: -2,
+    GEN_CLUE: -2,
+};
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -36,14 +44,14 @@ class App extends Component {
         });
     }
 
-    newPoke() {
+    skipPoke() {
         if (this.state.points === 0) {
             this.setState({
                 status: "forbidden",
             });
         } else {
             this.setState((prevState) => ({
-                points: prevState.points - 1,
+                points: prevState.points + points.SKIP,
                 pokemon: this.randPoke(),
             }));
         }
@@ -112,7 +120,7 @@ class App extends Component {
     onSubmit() {
         if (this.generousMatch(this.state.currentGuess, this.state.pokemon.name)) {
             this.setState((prevState) => ({
-                points: prevState.points + 1,
+                points: prevState.points + points.CORRECT,
                 hidden: false,
                 reveal: new Set(),
                 status: "correct",
@@ -131,9 +139,10 @@ class App extends Component {
                 2000,
             );
         } else {
-            this.setState({
+            this.setState((prevState) => ({
                 status: "nope",
-            });
+                points: prevState.points + points.WRONG,
+            }));
         }
     }
 
@@ -166,8 +175,8 @@ class App extends Component {
             <Grid>
                 <Row>
                     <Col xs={3}>
-                        <Button onClick={this.newPoke.bind(this)}>
-                            Shuffle (cost: 1 point)
+                        <Button onClick={this.skipPoke.bind(this)}>
+                            {`Skip (cost: ${Math.abs(points.SKIP)} points)`}
                         </Button>
                     </Col>
                     <Col xs={3}>
