@@ -44,6 +44,13 @@ class App extends Component {
         });
     }
 
+    componentWillUpdate({nextState}) {
+        if (nextState.points < 0) {
+            // TODO: game over
+            console.log("Game over!");
+        }
+    }
+
     skipPoke() {
         if (this.state.points === 0) {
             this.setState({
@@ -157,17 +164,26 @@ class App extends Component {
 
         const radius = 5;
 
-        this.setState((prevState) => {
-            for (let xDiff=-radius; xDiff<=radius; xDiff++) {
-                for (let yDiff=-radius; yDiff<=radius; yDiff++) {
-                    if (Math.sqrt(xDiff**2 + yDiff**2) <= radius) {
-                        prevState.reveal.add([x + xDiff, y + yDiff]+'');
+        if (this.state.points + points.REVEAL < 0) {
+            this.setState({
+                status: "forbidden",
+            });
+        } else {
+            this.setState((prevState) => {
+                for (let xDiff=-radius; xDiff<=radius; xDiff++) {
+                    for (let yDiff=-radius; yDiff<=radius; yDiff++) {
+                        if (Math.sqrt(xDiff**2 + yDiff**2) <= radius) {
+                            prevState.reveal.add([x + xDiff, y + yDiff]+'');
+                        }
                     }
                 }
-            }
 
-            return prevState;
-        });
+                return {
+                    reveal: prevState.reveal,  // updated inplace by above
+                    points: prevState.points + points.REVEAL,
+                };
+            });
+        }
     }
 
     render() {
