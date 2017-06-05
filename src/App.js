@@ -12,6 +12,14 @@ const points = {
     SKIP: -5,
     REVEAL: -2,
     GEN_CLUE: -2,
+    EVO_CLUE: -4,
+
+    START: 5,
+};
+
+const modes = {
+    GUESSING: Symbol("guessing mode"),
+    REVEALING: Symbol("revealing mode"),
 };
 
 class App extends Component {
@@ -20,6 +28,7 @@ class App extends Component {
 
         this.state = {
             loading: true,
+            mode: modes.GUESSING,
 
             potentials: names,//.filter(poke => poke.generation === 1),
             generations: new Set(names.map(poke => poke.generation)),
@@ -28,7 +37,7 @@ class App extends Component {
             reveal: new Set(),
 
             currentGuess: '',
-            points: 0,
+            points: points.START,
             status: null,
         };
 
@@ -44,7 +53,7 @@ class App extends Component {
         });
     }
 
-    componentWillUpdate({nextState}) {
+    componentWillUpdate(nextProps, nextState) {
         if (nextState.points < 0) {
             // TODO: game over
             console.log("Game over!");
@@ -160,8 +169,9 @@ class App extends Component {
     }
 
     onClickToReveal({x, y}) {
-        // TODO: Dynamic radius (based on difficulty? increasing? based on points spent?)
+        if (!(this.state.mode === modes.REVEALING)) return;
 
+        // TODO: Dynamic radius (based on difficulty? increasing? based on points spent?)
         const radius = 5;
 
         if (this.state.points + points.REVEAL < 0) {
@@ -186,6 +196,13 @@ class App extends Component {
         }
     }
 
+    changeModes(e) {
+        console.log(e.target.checked);
+        this.setState({
+            mode: e.target.checked ? modes.REVEALING : modes.GUESSING,
+        });
+    }
+
     render() {
         return (
             <Grid>
@@ -194,6 +211,9 @@ class App extends Component {
                         <Button onClick={this.skipPoke.bind(this)}>
                             {`Skip (cost: ${Math.abs(points.SKIP)} points)`}
                         </Button>
+                        <Checkbox onClick={this.changeModes.bind(this)}>
+                            {`Reveal mode (cost: ${Math.abs(points.REVEAL)} points per click)`}
+                        </Checkbox>
                     </Col>
                     <Col xs={3}>
                         <h2>{this.state.points} point{this.state.points === 1 ? "": "s"}!</h2>
@@ -221,7 +241,7 @@ class App extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={10}>
+                    <Col xs={10} className={`mode-${this.state.mode === modes.REVEALING ? "revealing" : "guessing"}`}>
                         {this.state.loading ? null :
                         <Pokemon
                             {...this.state.pokemon}
