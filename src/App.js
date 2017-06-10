@@ -197,7 +197,6 @@ class App extends Component {
     }
 
     changeModes(e) {
-        console.log(e.target.checked);
         this.setState({
             mode: e.target.checked ? modes.REVEALING : modes.GUESSING,
         });
