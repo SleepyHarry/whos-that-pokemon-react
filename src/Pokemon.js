@@ -44,7 +44,7 @@ const getFamily = (poke) => {
     // this object is effectively a "tree", and is referred to as a family
     let root = poke;
     while (root.evolves_from_id !== null) {
-        root = getEvolvesFrom(poke)[0];
+        root = getEvolvesFrom(root)[0];
     }
 
     let todo = [root];
@@ -66,7 +66,7 @@ export default class Pokemon extends Component {
         number: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
 
-        hidden: PropTypes.bool.isRequired,
+        hidden: PropTypes.bool,
         reveal: PropTypes.instanceOf(Set),
         zoom: PropTypes.number,
 
@@ -74,6 +74,7 @@ export default class Pokemon extends Component {
     };
 
     static defaultProps = {
+        hidden: false,
         reveal: new Set(),
         zoom: 1,
 
