@@ -27,18 +27,37 @@ function pad(num) {
 const getEvolvesFrom = (poke) => {
     // given a poke object (as in names.json), find what it evolves from (unique)
     // returns a (possibly empty) array of pokés
-    return names.filter(x => x.number === poke.evolves_from);
+    return names.filter(x => x.number === poke.evolves_from_id);
 };
 
 const getEvolvesInto = (poke) => {
     // given a poke object (as in names.json), find what it evolves into
     // returns a (possibly empty) array of pokés
-    return names.filter(x => x.evolves_from === poke.number);
+    return names.filter(x => x.evolves_from_id === poke.number);
 };
 
-// TODO: traverse tree (getFamily)
+const getFamily = (poke) => {
+    // given a poke object (as in names.json), return the full evo family
+    // returns an augmented poke object. object is normal but has a "evolves_from"
+    // and "evolves_into" attribute, which are arrays of augmented poke objects
+    // "root" poké is first in evo line
+    // this object is effectively a "tree", and is referred to as a family
+    let root = poke;
+    while (root.evolves_from_id !== null) {
+        root = getEvolvesFrom(poke)[0];
+    }
 
-export {getEvolvesFrom, getEvolvesInto};
+    let todo = [root];
+    let next;
+    while ((next = todo.shift()) !== undefined) {
+        next.evolves_into = getEvolvesInto(next);
+        todo = todo.concat(next.evolves_into);
+    }
+
+    return root;
+};
+
+export {getEvolvesFrom, getEvolvesInto, getFamily};
 
 
 export default class Pokemon extends Component {
