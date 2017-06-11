@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import names from "./names.json";
+
 const SPRITE_HEIGHT = 96,
     GREY = "rgb(64, 64, 64)",
     TRANSPARENT = "rgba(0, 0, 0, 0)";
@@ -21,6 +23,22 @@ function pad(num) {
     let s = num + '';
     return '000'.substring(0, 3 - s.length) + s;
 }
+
+const getEvolvesFrom = (poke) => {
+    // given a poke object (as in names.json), find what it evolves from (unique)
+    // returns a (possibly empty) array of pokés
+    return names.filter(x => x.number === poke.evolves_from);
+};
+
+const getEvolvesInto = (poke) => {
+    // given a poke object (as in names.json), find what it evolves into
+    // returns a (possibly empty) array of pokés
+    return names.filter(x => x.evolves_from === poke.number);
+};
+
+// TODO: traverse tree (getFamily)
+
+export {getEvolvesFrom, getEvolvesInto};
 
 
 export default class Pokemon extends Component {
