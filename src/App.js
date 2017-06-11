@@ -3,9 +3,10 @@ import {Button, Checkbox, Col, FormControl, FormGroup, Grid, Row} from "react-bo
 import "./App.css";
 
 import names from "./names.json";
-import Pokemon from "./Pokemon";
+import Pokemon, {getFamily} from "./Pokemon";
 import StatusBox from "./StatusBox";
 import levenshtein from "./levenshtein";
+import EvoFamily from "./EvoFamily";
 
 const points = {
     CORRECT: 10,
@@ -272,7 +273,7 @@ class App extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={10} className={`mode-${this.state.mode === modes.REVEALING ? "revealing" : "guessing"}`}>
+                    <Col xs={8} className={`mode-${this.state.mode === modes.REVEALING ? "revealing" : "guessing"}`}>
                         {this.state.loading ? null :
                         <Pokemon
                             {...this.state.pokemon}
@@ -281,6 +282,11 @@ class App extends Component {
                             reveal={this.state.reveal}
                             onClick={this.onClickToReveal.bind(this)}
                         />}
+                    </Col>
+                    <Col xs={2}>
+                        {this.state.loading ? null :
+                            <EvoFamily family={getFamily(this.state.pokemon)}/>
+                        }
                     </Col>
                     <Col xs={2}>
                         {this.state.status ?
