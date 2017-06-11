@@ -14,7 +14,7 @@ const matrix = (m, n) => {
 };
 
 
-export default levenshtein = (s, t) => {
+const levenshtein = (s, t) => {
     s = s.toLowerCase();
     t = t.toLowerCase();
 
@@ -47,7 +47,7 @@ export default levenshtein = (s, t) => {
         }
     }
 
-    console.log(mat);
-
     return mat[n][m];
 };
+
+export default levenshtein;

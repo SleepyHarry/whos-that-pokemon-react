@@ -17,7 +17,12 @@ const options = {
         color: "red",
         icon: "exclamation-triangle",
         text: "Not enough points!",
-    }
+    },
+    close: {
+        color: "orange",
+        icon: "hand-lizard-o",
+        text: "Almost!",
+    },
 };
 
 

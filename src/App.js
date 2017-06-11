@@ -5,10 +5,12 @@ import "./App.css";
 import names from "./names.json";
 import Pokemon from "./Pokemon";
 import StatusBox from "./StatusBox";
+import levenshtein from "./levenshtein";
 
 const points = {
     CORRECT: 10,
     WRONG: -0,
+    CLOSE: -0,
     SKIP: -5,
     REVEAL: -2,
     GEN_CLUE: -2,
@@ -126,15 +128,15 @@ class App extends Component {
         });
     }
 
-    generousMatch(s1, s2) {
-        s1 = s1.toLowerCase().replace(/[^a-z]/g, '');
-        s2 = s2.toLowerCase().replace(/[^a-z]/g, '');
-
-        return s1 === s2;
+    clean(s) {
+        return s.toLowerCase().replace(/[^a-z]/g, '');
     }
 
     onSubmit() {
-        if (this.generousMatch(this.state.currentGuess, this.state.pokemon.name)) {
+        const guess = this.clean(this.state.currentGuess);
+        const target = this.clean(this.state.pokemon.name);
+
+        if (guess === target) {
             this.setState((prevState) => ({
                 points: prevState.points + points.CORRECT,
                 hidden: false,
@@ -154,6 +156,11 @@ class App extends Component {
                 },
                 2000,
             );
+        } else if (levenshtein(guess, target) <= 2) {
+            this.setState((prevState) => ({
+                status: "close",
+                points: prevState.points + points.CLOSE,
+            }));
         } else {
             this.setState((prevState) => ({
                 status: "nope",
