@@ -1,21 +1,30 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Pokemon from "./Pokemon";
+import Pokemon, {getFamily} from "./Pokemon";
 
 
 export default class EvoFamily extends Component {
     static propTypes = {
-        family: PropTypes.object.isRequired,
+        // if family is not provided, seed must be
+        seed: PropTypes.object,
+        family: PropTypes.object,
+    };
+
+    static defaultTypes = {
+        seed: undefined,
+        family: undefined,
     };
 
     render() {
-        console.log(this.props.family);
-        let curPoke = this.props.family;
+        let family = this.props.family;
+        if (family === undefined) {
+            family = getFamily(this.props.seed);
+        }
+
+        let curPoke = family;
         let pokes = [curPoke];
 
-        console.log('curPoke:', curPoke);
         while (curPoke.evolves_into.length > 0) {
-            console.log('pokes:', pokes);
             pokes.push(curPoke.evolves_into[0]);
             curPoke = curPoke.evolves_into[0];
         }
@@ -27,6 +36,7 @@ export default class EvoFamily extends Component {
                     generation={poke.generation}
                     number={poke.number}
                     name={poke.name}
+                    hidden={poke.number === this.props.seed.number}
                 />
             )}
         </div>

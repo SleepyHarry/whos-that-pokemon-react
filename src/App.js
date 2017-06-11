@@ -285,7 +285,7 @@ class App extends Component {
                     </Col>
                     <Col xs={2}>
                         {this.state.loading ? null :
-                            <EvoFamily family={getFamily(this.state.pokemon)}/>
+                            <EvoFamily seed={this.state.pokemon}/>
                         }
                     </Col>
                     <Col xs={2}>
