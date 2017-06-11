@@ -28,12 +28,33 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        const allGenerations = new Set(names.map(poke => poke.generation));
+        let chosenGenerations = [];
+
+        for (let gen of allGenerations) {
+            if (localStorage.getItem(`gen-${gen}`)) {
+                chosenGenerations.push(gen);
+            }
+        }
+
+        if (chosenGenerations.length === 0) {
+            // typically because this is the user's first visit
+            for (let gen of allGenerations) {
+                localStorage.setItem(`gen-${gen}`, true);
+            }
+            chosenGenerations = allGenerations;
+        }
+
+        chosenGenerations = new Set(chosenGenerations);
+
+        this.allGenerations = new Array(...allGenerations).sort();
+
         this.state = {
             loading: true,
             mode: modes.GUESSING,
 
-            potentials: names,//.filter(poke => poke.generation === 1),
-            generations: new Set(names.map(poke => poke.generation)),
+            potentials: names.filter(poke => chosenGenerations.has(poke.generation)),
+            generations: chosenGenerations,
             // pokemon: this.randPoke(),
             hidden: true,
             reveal: new Set(),
@@ -42,8 +63,6 @@ class App extends Component {
             points: points.START,
             status: null,
         };
-
-        this.generations = new Array(...this.state.generations).sort();
 
         this.randPoke = this.randPoke.bind(this);
     }
@@ -112,7 +131,13 @@ class App extends Component {
         this.setState((prevState) => {
             let generations = prevState.generations;
 
-            checked ? generations.add(gen) : generations.delete(gen);
+            if (checked) {
+                generations.add(gen);
+                localStorage.setItem(`gen-${gen}`, true);
+            } else {
+                generations.delete(gen);
+                localStorage.removeItem(`gen-${gen}`);
+            }
 
             let fullPotentials = names
                 .filter(poke => generations.has(poke.generation));
@@ -266,7 +291,7 @@ class App extends Component {
                 <Row>
                     <Col xs={12}>
                         <FormGroup>
-                            {this.generations.map(gen =>
+                            {this.allGenerations.map(gen =>
                             <Checkbox
                                 key={gen}
                                 inline
