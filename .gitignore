@@ -20,3 +20,6 @@ yarn-error.log*
 .idea
 .idea/
 .idea/*
+
+# virtualenv
+env/
