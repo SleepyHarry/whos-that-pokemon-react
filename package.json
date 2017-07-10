@@ -15,7 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "deploy": "git branch -D tmp; git checkout -b tmp && git add -f build && git commit -m 'build' && git push heroku tmp:master && git checkout -",
+    "deploy": "git branch -D tmp; yarn build && git checkout -b tmp && git add -f build && git commit -m 'build' && git push heroku tmp:master && git checkout -",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
