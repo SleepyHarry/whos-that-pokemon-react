@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Button} from "react-bootstrap";
+import LeaderboardEntry from "./LeaderboardEntry";
 
 
 class Leaderboard extends Component {
@@ -24,18 +25,6 @@ class Leaderboard extends Component {
     }
 
     render() {
-        const LeaderboardEntry = (props) => {
-            const rank = props.rank < 10 ?
-                <span>&nbsp;{props.rank}</span> :
-                <span>{props.rank}</span>;
-
-            return <div
-                style={props.distinguish ? {color: "firebrick"} : {}}
-            >
-                {rank} {props.children.initials} - {props.children.score}
-            </div>;
-        };
-
         const leaderboard = this.props.leaderboard
                 .filter(entry => entry.generation === this.state.generation);
 
