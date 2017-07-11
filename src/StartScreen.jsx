@@ -2,12 +2,13 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Button, Col, Row} from "react-bootstrap";
 import Leaderboard from "./Leaderboard";
+import WtpTitle from "./WtpTitle";
 
 
 class StartScreen extends Component {
     render() {
         return <div>
-            <h1>Who's that Pokémon?</h1>
+            <WtpTitle/>
             <Row>
                 <Col xs={9}>
                     <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>

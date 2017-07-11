@@ -4,6 +4,7 @@ import {Button, Col, FormControl, FormGroup, Row} from "react-bootstrap";
 import Pokemon from "./Pokemon";
 import StatusBox from "./StatusBox";
 import levenshtein from "./levenshtein";
+import WtpTitle from "./WtpTitle";
 
 
 const points = {
@@ -276,6 +277,7 @@ class GameScreen extends Component {
         }
 
         return <div>
+            <WtpTitle/>
             <Row>
                 <Col xs={3}>
                     <h2>{this.state.points} point{this.state.points === 1 ? "" : "s"}!</h2>

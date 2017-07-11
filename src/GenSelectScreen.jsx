@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Button} from "react-bootstrap";
+import WtpTitle from "./WtpTitle";
 
 
 class GenSelectScreen extends Component {
@@ -29,7 +30,7 @@ class GenSelectScreen extends Component {
 
     render() {
         return <div>
-            <h1>Who's that Pokémon?</h1>
+            <WtpTitle/>
             {/*<Carousel generation={this.props.generation}/>*/}
             {this.generations.map((gen) =>
                 <Button
