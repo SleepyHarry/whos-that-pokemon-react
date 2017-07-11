@@ -2,6 +2,14 @@
     cursor: zoom-in;
 }
 
+:global .distinguished {
+    color: firebrick;
+}
+
 :global .padding {
     color: darkgrey;
+}
+
+:global .distinguished .padding {
+    color: #ce777a;
 }

@@ -9,7 +9,7 @@ const LeaderboardEntry = (props) => {
         <span>{props.rank}</span>;
 
     return <div
-        style={props.distinguish ? {color: "firebrick"} : {}}
+        className={props.distinguish ? "distinguished" : ""}
     >
         {rank} {props.children.initials} <Score score={props.children.score} length={6}/>
     </div>;
