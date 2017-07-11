@@ -126,29 +126,35 @@ class GameScreen extends Component {
         const guess = this.clean(this.state.currentGuess);
         const target = this.clean(this.state.pokemon.name);
 
-        if (levenshtein(guess, target) <= 2) {  // close to correct
-            const correct = guess === target;
+        const close = levenshtein(guess, target) <= 2;
+        const correct = guess === target;
 
-            this.setState((prevState) => ({
-                points: prevState.points + this.calcScore(correct ? 1 : points.CLOSE_MODIFIER),
-                hidden: false,
-                lastGuessTime: Date.now(),
-                // status: "correct",
-            }));
-
-            setTimeout(
-                () => {
-                    this.setState({
-                        hidden: true,
-                        currentGuess: '',
-                        pokemon: this.randPoke(),
-                        // status: null,
-                    });
-                    this.guessInput.focus();
-                },
-                500,
-            );
+        let additionalPoints;
+        if (!close) {
+            additionalPoints = 0
+        } else {
+            additionalPoints = this.calcScore(correct ? 1 : points.CLOSE_MODIFIER);
         }
+
+        this.setState((prevState) => ({
+            points: prevState.points + additionalPoints,
+            hidden: false,
+            lastGuessTime: Date.now(),
+            // status: "correct",
+        }));
+
+        setTimeout(
+            () => {
+                this.setState({
+                    hidden: true,
+                    currentGuess: '',
+                    pokemon: this.randPoke(),
+                    // status: null,
+                });
+                this.guessInput.focus();
+            },
+            500,
+        );
     }
 
     onPokeKeyUp(e) {
