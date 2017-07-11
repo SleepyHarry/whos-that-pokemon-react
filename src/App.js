@@ -5,6 +5,7 @@ import "./App.css";
 import names from "./names.json";
 import StartScreen from "./StartScreen";
 import GameScreen from "./GameScreen";
+import GenSelectScreen from "./GenSelectScreen";
 
 const screens = {
     START: Symbol("start screen"),
@@ -16,12 +17,10 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.allGenerations = new Array(...new Set(names.map(poke => poke.generation))).sort();
-
         this.state = {
             screen: screens.START,
 
-            generation: 1,  // TODO
+            generation: null,
         };
 
         // fetch('/api/leaderboard/').then((response) => {
@@ -31,8 +30,11 @@ class App extends Component {
         // });
     }
 
-    onScreenSelect(screen) {
-        this.setState({screen});
+    onScreenSelect(screen, state) {
+        this.setState({
+            screen,
+            ...state,  // to pass extra info, like generation choice
+        });
     }
 
     render() {
@@ -45,7 +47,7 @@ class App extends Component {
                 ActiveScreen = StartScreen;
                 break;
             case screens.GEN_CHOOSE:
-                ActiveScreen = DummyScreen;
+                ActiveScreen = GenSelectScreen;
                 break;
             case screens.GAME:
                 ActiveScreen = GameScreen;
@@ -61,7 +63,10 @@ class App extends Component {
                     goToScreen={this.onScreenSelect.bind(this)}
                     screens={screens}
 
-                    pokes={names.filter(poke => poke.generation === this.state.generation)}
+                    pokes={this.state.generation === null ?
+                        names :
+                        names.filter(poke => poke.generation === this.state.generation)
+                    }
                 />
             </Grid>
         );

@@ -7,8 +7,7 @@ class StartScreen extends Component {
     render() {
         return <div>
             <h1>Who's that Pokémon?</h1>
-            {/*<Button onClick={this.props.goToScreen(this.props.screens.GEN_CHOOSE)}>Start</Button>*/}
-            <Button onClick={() => {this.props.goToScreen(this.props.screens.GAME)}}>Start</Button>
+            <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>
         </div>
     }
 }
