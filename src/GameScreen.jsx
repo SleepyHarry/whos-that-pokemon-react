@@ -18,6 +18,9 @@ const points = {
     START: 5,
 };
 
+const fps = 10;
+const tickInterval = 1000 / fps;  // milliseconds
+
 
 class GameScreen extends Component {
     constructor(props) {
@@ -34,6 +37,9 @@ class GameScreen extends Component {
             potentials: props.pokes,
 
             points: points.START,
+
+            startTime: null,
+            elapsedTime: 0,
         };
 
         this.randPoke = this.randPoke.bind(this);
@@ -42,7 +48,23 @@ class GameScreen extends Component {
     componentDidMount() {
         this.setState({
             loading: false,
+            startTime: Date.now(),
             pokemon: this.randPoke(),
+        });
+
+        this.tickTimerID = setInterval(
+            () => { this.tick(); },
+            tickInterval,
+        );
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.tickTimerID);
+    }
+
+    tick() {
+        this.setState({
+            elapsedTime: Date.now() - this.state.startTime,
         });
     }
 
@@ -129,6 +151,27 @@ class GameScreen extends Component {
                 <Col xs={3}>
                     <h2>{this.state.points} point{this.state.points === 1 ? "" : "s"}!</h2>
                 </Col>
+                <Col xs={6}/>
+                <Col xs={3}>
+                    <h2>{Math.floor(this.state.elapsedTime / 1000)}</h2>
+                </Col>
+            </Row>
+            <Row>
+                <Col xs={8}>
+                    {this.state.loading ? null :
+                        <Pokemon
+                            {...this.state.pokemon}
+                            hidden={this.state.hidden}
+                            zoom={6}
+                        />}
+                </Col>
+                <Col xs={2}>
+                    {this.state.status ?
+                        <StatusBox option={this.state.status}/> :
+                        null}
+                </Col>
+            </Row>
+            <Row>
                 <Col xs={4}>
                     <FormGroup validationState={null}>
                         <FormControl
@@ -151,21 +194,6 @@ class GameScreen extends Component {
                     >
                         Guess
                     </Button>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={8}>
-                    {this.state.loading ? null :
-                        <Pokemon
-                            {...this.state.pokemon}
-                            hidden={this.state.hidden}
-                            zoom={6}
-                        />}
-                </Col>
-                <Col xs={2}>
-                    {this.state.status ?
-                        <StatusBox option={this.state.status}/> :
-                        null}
                 </Col>
             </Row>
         </div>;
