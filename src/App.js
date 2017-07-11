@@ -21,6 +21,8 @@ class App extends Component {
             screen: screens.START,
 
             generation: null,
+
+            lastScore: null,
         };
 
         // fetch('/api/leaderboard/').then((response) => {
@@ -34,6 +36,16 @@ class App extends Component {
         this.setState({
             screen,
             ...state,  // to pass extra info, like generation choice
+        });
+    }
+
+    onScoreSubmit(score) {
+        // score = {initials, points}
+        this.setState({
+            lastScore: {
+                ...score,
+                generation: this.state.generation,
+            },
         });
     }
 
@@ -67,6 +79,8 @@ class App extends Component {
                         names :
                         names.filter(poke => poke.generation === this.state.generation)
                     }
+                    lastScore={this.state.lastScore}
+                    submitScore={this.onScoreSubmit.bind(this)}
                 />
             </Grid>
         );

@@ -44,6 +44,8 @@ class GameScreen extends Component {
             startTime: null,
             elapsedTime: 0,
             lastGuessTime: null,
+
+            initials: '',
         };
 
         this.randPoke = this.randPoke.bind(this);
@@ -99,7 +101,7 @@ class GameScreen extends Component {
         return newPoke;
     }
 
-    onChange(e) {
+    onPokeChange(e) {
         this.setState({
             currentGuess: e.target.value,
             // status: null,
@@ -116,7 +118,7 @@ class GameScreen extends Component {
         return Math.floor(modifier * (points.DECAY_FUNC(timeDiff) * points.MAX_CORRECT));
     }
 
-    onSubmit() {
+    onPokeSubmit() {
         const guess = this.clean(this.state.currentGuess);
         const target = this.clean(this.state.pokemon.name);
 
@@ -145,9 +147,33 @@ class GameScreen extends Component {
         }
     }
 
-    onKeyUp(e) {
+    onPokeKeyUp(e) {
         if (e.key === "Enter") {
-            this.onSubmit();
+            this.onPokeSubmit();
+        }
+    }
+
+    onInitialsChange(e) {
+        this.setState({initials: e.target.value});
+    }
+
+    onInitialsSubmit() {
+        this.props.submitScore({
+            initials: this.state.initials,
+            points: this.state.points,
+        });
+
+        this.props.goToScreen(
+            this.props.screens.START,
+            {
+                generation: null,
+            },
+        );
+    }
+
+    onInitialsKeyUp(e) {
+        if (e.key === "Enter") {
+            this.onInitialsSubmit();
         }
     }
 
@@ -170,28 +196,83 @@ class GameScreen extends Component {
             // main game
             phase = phases.GAME;
             body = <div>
-                <Col xs={8}>
-                    {this.state.loading ? null :
-                        <Pokemon
-                            {...this.state.pokemon}
-                            hidden={this.state.hidden}
-                            zoom={6}
-                        />}
-                </Col>
-                <Col xs={2}>
-                    {this.state.status ?
-                        <StatusBox option={this.state.status}/> :
-                        null}
-                </Col>
+                <Row>
+                    <Col xs={8}>
+                        {this.state.loading ? null :
+                            <Pokemon
+                                {...this.state.pokemon}
+                                hidden={this.state.hidden}
+                                zoom={6}
+                            />}
+                    </Col>
+                    <Col xs={2}>
+                        {this.state.status ?
+                            <StatusBox option={this.state.status}/> :
+                            null}
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={4}>
+                        <FormGroup validationState={null}>
+                            <FormControl
+                                type="text"
+                                value={this.state.currentGuess}
+                                placeholder="Your guess"
+                                inputRef={(input) => {
+                                    this.guessInput = input;
+                                }}
+                                onChange={this.onPokeChange.bind(this)}
+                                onKeyUp={this.onPokeKeyUp.bind(this)}
+                                disabled={!this.state.hidden}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col xs={2}>
+                        <Button
+                            type="submit"
+                            onClick={this.onPokeSubmit.bind(this)}
+                        >
+                            Guess
+                        </Button>
+                    </Col>
+                </Row>
             </div>;
         } else {
             // game over
             phase = phases.DONE;
             clearInterval(this.tickTimerID);
 
-            body = <Col>
-                <h1>GAME OVER!</h1>
-            </Col>;
+            body = <div>
+                <Row>
+                    <Col>
+                        <h1>GAME OVER!</h1>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={4}>
+                        <FormGroup validationState={null}>
+                            <FormControl
+                                type="text"
+                                value={this.state.initials}
+                                placeholder="Your initials"
+                                inputRef={(input) => {
+                                    this.initialsInput = input;
+                                }}
+                                onChange={this.onInitialsChange.bind(this)}
+                                onKeyUp={this.onInitialsKeyUp.bind(this)}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col xs={2}>
+                        <Button
+                            type="submit"
+                            onClick={this.onInitialsSubmit.bind(this)}
+                        >
+                            Guess
+                        </Button>
+                    </Col>
+                </Row>
+            </div>;
         }
 
         return <div>
@@ -209,36 +290,7 @@ class GameScreen extends Component {
                     />
                 </Col>
             </Row>
-            <Row>
-                {body}
-            </Row>
-            {phase === phases.GAME &&
-                <Row>
-                    <Col xs={4}>
-                        <FormGroup validationState={null}>
-                            <FormControl
-                                type="text"
-                                value={this.state.currentGuess}
-                                placeholder="Your guess"
-                                inputRef={(input) => {
-                                    this.guessInput = input;
-                                }}
-                                onChange={this.onChange.bind(this)}
-                                onKeyUp={this.onKeyUp.bind(this)}
-                                disabled={!this.state.hidden}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col xs={2}>
-                        <Button
-                            type="submit"
-                            onClick={this.onSubmit.bind(this)}
-                        >
-                            Guess
-                        </Button>
-                    </Col>
-                </Row>
-            }
+            {body}
         </div>;
     }
 }
@@ -248,6 +300,8 @@ GameScreen.propTypes = {
     screens: PropTypes.object.isRequired,
 
     pokes: PropTypes.array.isRequired,
+
+    submitScore: PropTypes.func.isRequired,
 };
 
 export default GameScreen;
