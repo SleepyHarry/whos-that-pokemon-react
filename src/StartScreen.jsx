@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Button} from "react-bootstrap";
+import Leaderboard from "./Leaderboard";
 
 
 class StartScreen extends Component {
@@ -11,6 +12,7 @@ class StartScreen extends Component {
                 <h3>{this.props.lastScore.initials} (Gen {this.props.lastScore.generation}): {this.props.lastScore.points}</h3>
             }
             <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>
+            <Leaderboard leaderboard={this.props.leaderboard}/>
         </div>
     }
 }
@@ -24,6 +26,7 @@ StartScreen.propTypes = {
         points: PropTypes.number,
         generation: PropTypes.number,
     }),
+    leaderboard: PropTypes.array.isRequired,
 };
 
 StartScreen.defaultProps = {

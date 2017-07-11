@@ -8,6 +8,7 @@ import GameScreen from "./GameScreen";
 import GenSelectScreen from "./GenSelectScreen";
 
 const screens = {
+    LOADING: Symbol("loading screen"),
     START: Symbol("start screen"),
     GAME: Symbol("game screen"),
     GEN_CHOOSE: Symbol("generation choose screen"),
@@ -18,18 +19,27 @@ class App extends Component {
         super(props);
 
         this.state = {
-            screen: screens.START,
+            loading: true,
+
+            screen: screens.LOADING,
 
             generation: null,
 
+            leaderboard: [],
             lastScore: null,
         };
+    }
 
-        // fetch('/api/leaderboard/').then((response) => {
-        //     return response.json();
-        // }).then((j) => {
-        //     console.log(j);
-        // });
+    componentDidMount() {
+        fetch('/api/leaderboard/')
+            .then(response => response.json())
+            .then((j) => {
+                this.setState({
+                    loading: false,
+                    screen: screens.START,
+                    leaderboard: j,
+                });
+            });
     }
 
     onScreenSelect(screen, state) {
@@ -69,9 +79,10 @@ class App extends Component {
     render() {
         let ActiveScreen;
 
-        let DummyScreen = (props) => <div/>;
-
         switch (this.state.screen) {
+            case screens.LOADING:
+                ActiveScreen = (props) => <h1>Loading!</h1>;
+                break;
             case screens.START:
                 ActiveScreen = StartScreen;
                 break;
@@ -82,7 +93,7 @@ class App extends Component {
                 ActiveScreen = GameScreen;
                 break;
             default:
-                ActiveScreen = DummyScreen;
+                ActiveScreen = (props) => <h1>Something has gone horribly wrong!</h1>;
                 break;
         }
 
@@ -98,6 +109,7 @@ class App extends Component {
                     }
                     lastScore={this.state.lastScore}
                     submitScore={this.onScoreSubmit.bind(this)}
+                    leaderboard={this.state.leaderboard}
                 />
             </Grid>
         );
