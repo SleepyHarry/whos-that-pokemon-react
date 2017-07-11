@@ -69,6 +69,7 @@ class Leaderboard extends Component {
             {this.props.lastScore && this.props.lastScore.generation === this.state.generation && !lastScoreInTop10 &&
                 <LeaderboardEntry
                     distinguish={true}
+                    rank={this.props.lastScore.rank}
                 >
                     {this.props.lastScore}
                 </LeaderboardEntry>

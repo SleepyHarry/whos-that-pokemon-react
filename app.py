@@ -74,6 +74,14 @@ def leaderboard():
             k: getattr(new_score, k)
             for k in Leaderboard.__table__.columns.keys()
         }
+
+        out['new_score']['rank'] = next(
+            i + 1 for i, entry in enumerate(Leaderboard.query.filter_by(
+                generation=new_score.generation
+            ).order_by(
+                Leaderboard.score.desc()
+            )) if entry.id == new_score.id
+        )
     except NameError:
         pass
 
