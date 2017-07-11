@@ -14,7 +14,10 @@ class StartScreen extends Component {
                     <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>
                 </Col>
                 <Col xs={3}>
-                    <Leaderboard leaderboard={this.props.leaderboard}/>
+                    <Leaderboard
+                        leaderboard={this.props.leaderboard}
+                        lastScore={this.props.lastScore}
+                    />
                 </Col>
             </Row>
         </div>
@@ -26,6 +29,7 @@ StartScreen.propTypes = {
     screens: PropTypes.object.isRequired,
 
     lastScore: PropTypes.shape({
+        id: PropTypes.number,
         initials: PropTypes.string,
         points: PropTypes.number,
         generation: PropTypes.number,

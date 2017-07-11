@@ -56,13 +56,28 @@ def leaderboard():
             ).limit(10)
         )
 
-    return jsonify([
+    json_leaderboard = [
         {
             k: getattr(entry, k)
             for k in Leaderboard.__table__.columns.keys()
         }
         for entry in current_leaderboard
-    ])
+    ]
+
+    out = {
+        'leaderboard': json_leaderboard,
+    }
+
+    try:
+        # noinspection PyUnboundLocalVariable
+        out['new_score'] = {
+            k: getattr(new_score, k)
+            for k in Leaderboard.__table__.columns.keys()
+        }
+    except NameError:
+        pass
+
+    return jsonify(out)
 
 
 if __name__ == '__main__':

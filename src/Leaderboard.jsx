@@ -24,6 +24,25 @@ class Leaderboard extends Component {
     }
 
     render() {
+        const LeaderboardEntry = (props) => {
+            const rank = props.rank < 10 ?
+                <span>&nbsp;{props.rank}</span> :
+                <span>{props.rank}</span>;
+
+            return <div
+                style={props.distinguish ? {color: "firebrick"} : {}}
+            >
+                {rank} {props.children.initials} - {props.children.score}
+            </div>;
+        };
+
+        const leaderboard = this.props.leaderboard
+                .filter(entry => entry.generation === this.state.generation);
+
+        const lastScoreInTop10 = this.props.lastScore && leaderboard.map(
+            entry => entry.id
+        ).indexOf(this.props.lastScore.id) !== -1;
+
         return <div>
             <div>
                 <h4>GENERATION</h4>
@@ -37,18 +56,39 @@ class Leaderboard extends Component {
                     </Button>
                 )}
             </div>
-            {this.props.leaderboard
-                .filter(entry => entry.generation === this.state.generation)
-                .map(entry =>
-                    <div>{entry.initials} - {entry.generation} - {entry.score}</div>
-                )
+            {leaderboard.map((entry, i) =>
+                <LeaderboardEntry
+                    key={entry.id}
+                    rank={i + 1}
+                    distinguish={entry.id === (this.props.lastScore && this.props.lastScore.id)}
+                >
+                    {entry}
+                </LeaderboardEntry>
+            )}
+            <br/>
+            {this.props.lastScore && this.props.lastScore.generation === this.state.generation && !lastScoreInTop10 &&
+                <LeaderboardEntry
+                    distinguish={true}
+                >
+                    {this.props.lastScore}
+                </LeaderboardEntry>
             }
         </div>
     }
 }
 
 Leaderboard.propTypes = {
+    lastScore: PropTypes.shape({
+        id: PropTypes.number,
+        initials: PropTypes.string,
+        points: PropTypes.number,
+        generation: PropTypes.number,
+    }),
     leaderboard: PropTypes.array.isRequired,
+};
+
+Leaderboard.defaultProps = {
+    lastScore: null,
 };
 
 export default Leaderboard;

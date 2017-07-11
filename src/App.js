@@ -37,7 +37,7 @@ class App extends Component {
                 this.setState({
                     loading: false,
                     screen: screens.START,
-                    leaderboard: j,
+                    leaderboard: j.leaderboard,
                 });
             });
     }
@@ -56,10 +56,6 @@ class App extends Component {
             generation: this.state.generation,
         };
 
-        this.setState({
-            lastScore: newScore,
-        });
-
         fetch(
             '/api/leaderboard/',
             {
@@ -72,7 +68,12 @@ class App extends Component {
             },
         )
             .then(response => response.json())
-            .then(j => { this.setState({leaderboard: j}); })
+            .then(j => {
+                this.setState({
+                    leaderboard: j.leaderboard,
+                    lastScore: j.new_score,
+                })
+            })
             .catch(response => { console.log(response); });
     }
 
