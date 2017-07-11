@@ -66,6 +66,12 @@ class App extends Component {
         };
 
         this.randPoke = this.randPoke.bind(this);
+
+        fetch('/api/leaderboard/').then((response) => {
+            return response.json();
+        }).then((j) => {
+            console.log(j);
+        });
     }
 
     componentDidMount() {
@@ -73,13 +79,6 @@ class App extends Component {
             pokemon: this.randPoke(),
             loading: false,
         });
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        if (nextState.points < 0) {
-            // TODO: game over
-            console.log("Game over!");
-        }
     }
 
     skipPoke() {
@@ -123,34 +122,6 @@ class App extends Component {
         this.setState({
             currentGuess: e.target.value,
             status: null,
-        });
-    }
-
-    onGenerationSelect(gen, e) {
-        const checked = e.target.checked;  // to avoid persisting the event
-
-        this.setState((prevState) => {
-            let generations = prevState.generations;
-
-            if (checked) {
-                generations.add(gen);
-                localStorage.setItem(`gen-${gen}`, true);
-            } else {
-                generations.delete(gen);
-                localStorage.removeItem(`gen-${gen}`);
-            }
-
-            let fullPotentials = names
-                .filter(poke => generations.has(poke.generation));
-
-            let {newPoke, potentials} = this.randPokeFromPotentials(fullPotentials);
-
-            return {
-                generations,
-                potentials,
-                pokemon: newPoke,
-                reveal: new Set(),
-            };
         });
     }
 
@@ -201,52 +172,10 @@ class App extends Component {
         }
     }
 
-    onClickToReveal({x, y}) {
-        if (!(this.state.mode === modes.REVEALING)) return;
-
-        // TODO: Dynamic radius (based on difficulty? increasing? based on points spent?)
-        const radius = 5;
-
-        if (this.state.points + points.REVEAL < 0) {
-            this.setState({
-                status: "forbidden",
-            });
-        } else {
-            this.setState((prevState) => {
-                for (let xDiff=-radius; xDiff<=radius; xDiff++) {
-                    for (let yDiff=-radius; yDiff<=radius; yDiff++) {
-                        if (Math.sqrt(xDiff**2 + yDiff**2) <= radius) {
-                            prevState.reveal.add([x + xDiff, y + yDiff]+'');
-                        }
-                    }
-                }
-
-                return {
-                    reveal: prevState.reveal,  // updated inplace by above
-                    points: prevState.points + points.REVEAL,
-                };
-            });
-        }
-    }
-
-    changeModes(e) {
-        this.setState({
-            mode: e.target.checked ? modes.REVEALING : modes.GUESSING,
-        });
-    }
-
     render() {
         return (
             <Grid>
                 <Row>
-                    <Col xs={3}>
-                        <Button onClick={this.skipPoke.bind(this)}>
-                            {`Skip (cost: ${Math.abs(points.SKIP)} points)`}
-                        </Button>
-                        <Checkbox onClick={this.changeModes.bind(this)}>
-                            {`Reveal mode (cost: ${Math.abs(points.REVEAL)} points per click)`}
-                        </Checkbox>
-                    </Col>
                     <Col xs={3}>
                         <h2>{this.state.points} point{this.state.points === 1 ? "": "s"}!</h2>
                     </Col>
@@ -273,40 +202,18 @@ class App extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={8} className={`mode-${this.state.mode === modes.REVEALING ? "revealing" : "guessing"}`}>
+                    <Col xs={8}>
                         {this.state.loading ? null :
                         <Pokemon
                             {...this.state.pokemon}
                             hidden={this.state.hidden}
                             zoom={6}
-                            reveal={this.state.reveal}
-                            onClick={this.onClickToReveal.bind(this)}
                         />}
-                    </Col>
-                    <Col xs={2}>
-                        {this.state.loading ? null :
-                            <EvoFamily seed={this.state.pokemon}/>
-                        }
                     </Col>
                     <Col xs={2}>
                         {this.state.status ?
                         <StatusBox option={this.state.status}/> :
                         null}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12}>
-                        <FormGroup>
-                            {this.allGenerations.map(gen =>
-                            <Checkbox
-                                key={gen}
-                                inline
-                                checked={this.state.generations.has(gen)}
-                                onChange={this.onGenerationSelect.bind(this, gen)}
-                            >
-                                Gen {gen}
-                            </Checkbox>)}
-                        </FormGroup>
                     </Col>
                 </Row>
             </Grid>
