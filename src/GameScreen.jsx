@@ -7,6 +7,7 @@ import WtpTitle from "./WtpTitle";
 import Score from "./Score";
 
 import "./App.css";
+import ClockBar from "./ClockBar";
 
 
 const points = {
@@ -271,17 +272,22 @@ class GameScreen extends Component {
             </div>;
         }
 
+        const timeRemaining = GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME);
+
         return <div>
             <WtpTitle/>
             <Col xs={3} style={{float: "right"}}>
                 <div className="centre-content">
                     <TimeRemaining
-                        timeRemaining={GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME)}
+                        timeRemaining={timeRemaining}
                     />
                 </div>
-                {/*<div className="centre-content">*/}
-                    {/*<ClockBar/>*/}
-                {/*</div>*/}
+                <div className="centre-content">
+                    <ClockBar
+                        timeRemaining={timeRemaining}
+                        maxTime={GAME_TIME}
+                    />
+                </div>
                 <div className="centre-content">
                     <Score className="score score-main" score={this.state.points} length={6}/>
                 </div>
