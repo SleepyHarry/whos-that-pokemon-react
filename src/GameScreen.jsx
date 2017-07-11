@@ -18,6 +18,9 @@ const points = {
     START: 5,
 };
 
+const COUNTDOWN_TIME = 4000;  // allows a second of "GO!"
+const GAME_TIME = 60000;
+
 const fps = 10;
 const tickInterval = 1000 / fps;  // milliseconds
 
@@ -124,7 +127,7 @@ class GameScreen extends Component {
                     });
                     this.guessInput.focus();
                 },
-                2000,
+                500,
             );
         } else if (levenshtein(guess, target) <= 2) {
             this.setState((prevState) => ({
@@ -146,25 +149,46 @@ class GameScreen extends Component {
     }
 
     render() {
+        const TimeRemaining = (props) =>
+            props.timeRemaining > 0 && <h1>{Math.floor(props.timeRemaining / 1000)}</h1>
+        ;
+
+        let body;
+
+        if (this.state.elapsedTime < (COUNTDOWN_TIME)) {
+            // prepare
+            body = <Col>
+                <h1>{Math.floor((COUNTDOWN_TIME - this.state.elapsedTime) / 1000) || "GO"}!</h1>
+            </Col>;
+        } else if (this.state.elapsedTime < (COUNTDOWN_TIME + GAME_TIME)) {
+            // main game
+            body = <Col xs={8}>
+                {this.state.loading ? null :
+                    <Pokemon
+                        {...this.state.pokemon}
+                        hidden={this.state.hidden}
+                        zoom={6}
+                    />}
+            </Col>;
+        } else {
+            // game over
+            body = <Col>
+                <h1>GAME OVER!</h1>
+            </Col>;
+        }
+
         return <div>
             <Row>
                 <Col xs={3}>
                     <h2>{this.state.points} point{this.state.points === 1 ? "" : "s"}!</h2>
                 </Col>
                 <Col xs={6}/>
-                <Col xs={3}>
-                    <h2>{Math.floor(this.state.elapsedTime / 1000)}</h2>
-                </Col>
+                <TimeRemaining
+                    timeRemaining={GAME_TIME - (this.state.elapsedTime - COUNTDOWN_TIME)}
+                />
             </Row>
             <Row>
-                <Col xs={8}>
-                    {this.state.loading ? null :
-                        <Pokemon
-                            {...this.state.pokemon}
-                            hidden={this.state.hidden}
-                            zoom={6}
-                        />}
-                </Col>
+                {body}
                 <Col xs={2}>
                     {this.state.status ?
                         <StatusBox option={this.state.status}/> :
