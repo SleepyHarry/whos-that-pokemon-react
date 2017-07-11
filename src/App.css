@@ -2,14 +2,31 @@
     cursor: zoom-in;
 }
 
-:global .distinguished {
+.distinguished {
     color: firebrick;
 }
 
-:global .padding {
+.padding {
     color: darkgrey;
 }
 
-:global .distinguished .padding {
+.distinguished .padding {
     color: #ce777a;
+}
+
+.centre-content {
+    display: flex;
+}
+
+.score-main {
+    font-size: 36px;
+}
+
+.score-leaderboard {
+    display: inline;
+}
+
+.time-remaining {
+    margin: 0 auto;
+    font-size: 72px;
 }

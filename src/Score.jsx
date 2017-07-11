@@ -7,7 +7,7 @@ class Score extends Component {
         const score = this.props.score + "";
         const pad = "0".repeat(Math.max(0, this.props.length - score.length));
 
-        return <div style={{display: "inline"}} className={this.props.className}>
+        return <div className={this.props.className}>
             <span className="padding">{pad}</span><span>{score}</span>
         </div>;
     }

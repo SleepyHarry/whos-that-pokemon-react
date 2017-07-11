@@ -2,9 +2,11 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Button, Col, FormControl, FormGroup, Row} from "react-bootstrap";
 import Pokemon from "./Pokemon";
-import StatusBox from "./StatusBox";
 import levenshtein from "./levenshtein";
 import WtpTitle from "./WtpTitle";
+import Score from "./Score";
+
+import "./App.css";
 
 
 const points = {
@@ -20,7 +22,7 @@ const phases = {
 };
 
 const COUNTDOWN_TIME = 4000;  // allows a second of "GO!"
-const GAME_TIME = 6000;
+const GAME_TIME = 60000;
 
 const fps = 10;
 const tickInterval = 1000 / fps;  // milliseconds
@@ -180,7 +182,9 @@ class GameScreen extends Component {
 
     render() {
         const TimeRemaining = (props) =>
-            props.timeRemaining > 0 && <h1>{Math.floor(props.timeRemaining / 1000)}</h1>
+            <span className="time-remaining">
+                {Math.max(0, Math.floor(props.timeRemaining / 1000))}
+            </span>
         ;
 
         let body;
@@ -205,11 +209,6 @@ class GameScreen extends Component {
                                 hidden={this.state.hidden}
                                 zoom={6}
                             />}
-                    </Col>
-                    <Col xs={2}>
-                        {this.state.status ?
-                            <StatusBox option={this.state.status}/> :
-                            null}
                     </Col>
                 </Row>
                 <Row>
@@ -279,17 +278,22 @@ class GameScreen extends Component {
         return <div>
             <WtpTitle/>
             <Row>
+                <Col xs={9}/>
                 <Col xs={3}>
-                    <h2>{this.state.points} point{this.state.points === 1 ? "" : "s"}!</h2>
-                </Col>
-                <Col xs={3}/>
-                <Col xs={3}>
-                    Could get: {this.calcScore()}
-                </Col>
-                <Col xs={3}>
-                    <TimeRemaining
-                        timeRemaining={GAME_TIME - (this.state.elapsedTime - COUNTDOWN_TIME)}
-                    />
+                    <div className="centre-content">
+                        <TimeRemaining
+                            timeRemaining={GAME_TIME - (this.state.elapsedTime - COUNTDOWN_TIME)}
+                        />
+                    </div>
+                    {/*<div className="centre-content">*/}
+                        {/*<ClockBar/>*/}
+                    {/*</div>*/}
+                    <div className="centre-content">
+                        <Score className="score score-main" score={this.state.points} length={6}/>
+                    </div>
+                    {/*<div className="centre-content">*/}
+                        {/*<GuessHistory/>*/}
+                    {/*</div>*/}
                 </Col>
             </Row>
             {body}
