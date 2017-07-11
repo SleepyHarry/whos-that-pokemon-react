@@ -26,9 +26,11 @@ class Leaderboard extends Component {
     render() {
         return <div>
             <div>
+                <h4>GENERATION</h4>
                 {this.state.generations.map(gen =>
                     <Button
                         key={gen}
+                        active={gen === this.state.generation}
                         onClick={this.onSelectGen.bind(this, gen)}
                     >
                         {gen}

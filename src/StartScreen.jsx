@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Button} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
 import Leaderboard from "./Leaderboard";
 
 
@@ -8,11 +8,14 @@ class StartScreen extends Component {
     render() {
         return <div>
             <h1>Who's that Pokémon?</h1>
-            {this.props.lastScore &&
-                <h3>{this.props.lastScore.initials} (Gen {this.props.lastScore.generation}): {this.props.lastScore.points}</h3>
-            }
-            <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>
-            <Leaderboard leaderboard={this.props.leaderboard}/>
+            <Row>
+                <Col xs={9}>
+                    <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>
+                </Col>
+                <Col xs={3}>
+                    <Leaderboard leaderboard={this.props.leaderboard}/>
+                </Col>
+            </Row>
         </div>
     }
 }
