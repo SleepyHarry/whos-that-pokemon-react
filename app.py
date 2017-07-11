@@ -47,9 +47,14 @@ def leaderboard():
 
             raise
 
-    current_leaderboard = Leaderboard.query.order_by(
-        Leaderboard.score.desc()
-    ).limit(10)
+    # return top 10 for each generation
+    current_leaderboard = []
+    for gen in range(1, 6):
+        current_leaderboard.extend(
+            Leaderboard.query.filter_by(generation=gen).order_by(
+                Leaderboard.score.desc()
+            ).limit(10)
+        )
 
     return jsonify([
         {

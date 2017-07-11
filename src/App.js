@@ -72,7 +72,7 @@ class App extends Component {
             },
         )
             .then(response => response.json())
-            .then(j => { console.log(j); })
+            .then(j => { this.setState({leaderboard: j}); })
             .catch(response => { console.log(response); });
     }
 
