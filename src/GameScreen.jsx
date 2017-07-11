@@ -22,7 +22,7 @@ const phases = {
 };
 
 const COUNTDOWN_TIME = 4000;  // allows a second of "GO!"
-const GAME_TIME = 60000;
+const GAME_TIME = 600000;
 
 const fps = 10;
 const tickInterval = 1000 / fps;  // milliseconds
@@ -201,41 +201,37 @@ class GameScreen extends Component {
             // main game
             phase = phases.GAME;
             body = <div>
-                <Row>
-                    <Col xs={8}>
-                        {this.state.loading ? null :
-                            <Pokemon
-                                {...this.state.pokemon}
-                                hidden={this.state.hidden}
-                                zoom={6}
-                            />}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={4}>
-                        <FormGroup validationState={null}>
-                            <FormControl
-                                type="text"
-                                value={this.state.currentGuess}
-                                placeholder="Your guess"
-                                inputRef={(input) => {
-                                    this.guessInput = input;
-                                }}
-                                onChange={this.onPokeChange.bind(this)}
-                                onKeyUp={this.onPokeKeyUp.bind(this)}
-                                disabled={!this.state.hidden}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col xs={2}>
-                        <Button
-                            type="submit"
-                            onClick={this.onPokeSubmit.bind(this)}
-                        >
-                            Guess
-                        </Button>
-                    </Col>
-                </Row>
+                <Col xs={9}>
+                    {this.state.loading ? null :
+                        <Pokemon
+                            {...this.state.pokemon}
+                            hidden={this.state.hidden}
+                            zoom={6}
+                        />}
+                </Col>
+                <Col xs={4}>
+                    <FormGroup validationState={null}>
+                        <FormControl
+                            type="text"
+                            value={this.state.currentGuess}
+                            placeholder="Your guess"
+                            inputRef={(input) => {
+                                this.guessInput = input;
+                            }}
+                            onChange={this.onPokeChange.bind(this)}
+                            onKeyUp={this.onPokeKeyUp.bind(this)}
+                            disabled={!this.state.hidden}
+                        />
+                    </FormGroup>
+                </Col>
+                <Col xs={2}>
+                    <Button
+                        type="submit"
+                        onClick={this.onPokeSubmit.bind(this)}
+                    >
+                        Guess
+                    </Button>
+                </Col>
             </div>;
         } else {
             // game over
@@ -243,59 +239,52 @@ class GameScreen extends Component {
             clearInterval(this.tickTimerID);
 
             body = <div>
-                <Row>
-                    <Col>
-                        <h1>GAME OVER!</h1>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={4}>
-                        <FormGroup validationState={null}>
-                            <FormControl
-                                type="text"
-                                value={this.state.initials}
-                                placeholder="Your initials"
-                                inputRef={(input) => {
-                                    this.initialsInput = input;
-                                }}
-                                onChange={this.onInitialsChange.bind(this)}
-                                onKeyUp={this.onInitialsKeyUp.bind(this)}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col xs={2}>
-                        <Button
-                            type="submit"
-                            onClick={this.onInitialsSubmit.bind(this)}
-                        >
-                            Guess
-                        </Button>
-                    </Col>
-                </Row>
+                <Col>
+                    <h1>GAME OVER!</h1>
+                </Col>
+                <Col xs={4}>
+                    <FormGroup validationState={null}>
+                        <FormControl
+                            type="text"
+                            value={this.state.initials}
+                            placeholder="Your initials"
+                            inputRef={(input) => {
+                                this.initialsInput = input;
+                            }}
+                            onChange={this.onInitialsChange.bind(this)}
+                            onKeyUp={this.onInitialsKeyUp.bind(this)}
+                        />
+                    </FormGroup>
+                </Col>
+                <Col xs={2}>
+                    <Button
+                        type="submit"
+                        onClick={this.onInitialsSubmit.bind(this)}
+                    >
+                        Guess
+                    </Button>
+                </Col>
             </div>;
         }
 
         return <div>
             <WtpTitle/>
-            <Row>
-                <Col xs={9}/>
-                <Col xs={3}>
-                    <div className="centre-content">
-                        <TimeRemaining
-                            timeRemaining={GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME)}
-                        />
-                    </div>
-                    {/*<div className="centre-content">*/}
-                        {/*<ClockBar/>*/}
-                    {/*</div>*/}
-                    <div className="centre-content">
-                        <Score className="score score-main" score={this.state.points} length={6}/>
-                    </div>
-                    {/*<div className="centre-content">*/}
-                        {/*<GuessHistory/>*/}
-                    {/*</div>*/}
-                </Col>
-            </Row>
+            <Col xs={3} style={{float: "right"}}>
+                <div className="centre-content">
+                    <TimeRemaining
+                        timeRemaining={GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME)}
+                    />
+                </div>
+                {/*<div className="centre-content">*/}
+                    {/*<ClockBar/>*/}
+                {/*</div>*/}
+                <div className="centre-content">
+                    <Score className="score score-main" score={this.state.points} length={6}/>
+                </div>
+                {/*<div className="centre-content">*/}
+                    {/*<GuessHistory/>*/}
+                {/*</div>*/}
+            </Col>
             {body}
         </div>;
     }
