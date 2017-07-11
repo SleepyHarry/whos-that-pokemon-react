@@ -41,12 +41,29 @@ class App extends Component {
 
     onScoreSubmit(score) {
         // score = {initials, points}
+        const newScore = {
+            ...score,
+            generation: this.state.generation,
+        };
+
         this.setState({
-            lastScore: {
-                ...score,
-                generation: this.state.generation,
-            },
+            lastScore: newScore,
         });
+
+        fetch(
+            '/api/leaderboard/',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newScore),
+            },
+        )
+            .then(response => response.json())
+            .then(j => { console.log(j); })
+            .catch(response => { console.log(response); });
     }
 
     render() {

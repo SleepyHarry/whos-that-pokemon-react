@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 
 from models import db, Leaderboard
 
@@ -28,9 +28,26 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/api/leaderboard/')
-def get_leaderboard():
-    leaderboard = Leaderboard.query.order_by(
+@app.route('/api/leaderboard/', methods=['GET', 'POST'])
+def leaderboard():
+    if request.method == 'POST':
+        score = request.json
+
+        new_score = Leaderboard(
+            generation=score['generation'],
+            score=score['points'],
+            initials=score['initials'],
+        )
+
+        try:
+            db.session.add(new_score)
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+            raise
+
+    current_leaderboard = Leaderboard.query.order_by(
         Leaderboard.score.desc()
     ).limit(10)
 
@@ -39,7 +56,7 @@ def get_leaderboard():
             k: getattr(entry, k)
             for k in Leaderboard.__table__.columns.keys()
         }
-        for entry in leaderboard
+        for entry in current_leaderboard
     ])
 
 
