@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Score from "./Score";
 
 
 const LeaderboardEntry = (props) => {
@@ -10,7 +11,7 @@ const LeaderboardEntry = (props) => {
     return <div
         style={props.distinguish ? {color: "firebrick"} : {}}
     >
-        {rank} {props.children.initials} - {props.children.score}
+        {rank} {props.children.initials} <Score score={props.children.score} length={6}/>
     </div>;
 };
 

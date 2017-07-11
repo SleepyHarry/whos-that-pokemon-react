@@ -1,3 +1,7 @@
 .mode-revealing {
     cursor: zoom-in;
 }
+
+:global .padding {
+    color: darkgrey;
+}
