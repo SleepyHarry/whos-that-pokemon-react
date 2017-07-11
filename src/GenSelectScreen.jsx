@@ -9,8 +9,6 @@ class GenSelectScreen extends Component {
 
         this.generations = new Array(...new Set(props.pokes.map(poke => poke.generation))).sort();
 
-        console.log(this.generations);
-
         this.state = {
             chosenGen: null,
         };
