@@ -1,12 +1,11 @@
 import React, {Component} from "react";
-import {Button, Checkbox, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
+import {Button, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
 import "./App.css";
 
 import names from "./names.json";
-import Pokemon, {getFamily} from "./Pokemon";
+import Pokemon from "./Pokemon";
 import StatusBox from "./StatusBox";
 import levenshtein from "./levenshtein";
-import EvoFamily from "./EvoFamily";
 
 const points = {
     CORRECT: 10,
@@ -20,45 +19,27 @@ const points = {
     START: 5,
 };
 
-const modes = {
-    GUESSING: Symbol("guessing mode"),
-    REVEALING: Symbol("revealing mode"),
+const screens = {
+    START: Symbol("start screen"),
+    GAME: Symbol("game screen"),
+    GEN_CHOOSE: Symbol("generation choose screen"),
 };
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        const allGenerations = new Set(names.map(poke => poke.generation));
-        let chosenGenerations = [];
-
-        for (let gen of allGenerations) {
-            if (localStorage.getItem(`gen-${gen}`)) {
-                chosenGenerations.push(gen);
-            }
-        }
-
-        if (chosenGenerations.length === 0) {
-            // typically because this is the user's first visit
-            for (let gen of allGenerations) {
-                localStorage.setItem(`gen-${gen}`, true);
-            }
-            chosenGenerations = allGenerations;
-        }
-
-        chosenGenerations = new Set(chosenGenerations);
-
-        this.allGenerations = new Array(...allGenerations).sort();
+        this.allGenerations = new Array(...new Set(names.map(poke => poke.generation))).sort();
 
         this.state = {
             loading: true,
-            mode: modes.GUESSING,
 
-            potentials: names.filter(poke => chosenGenerations.has(poke.generation)),
-            generations: chosenGenerations,
+            screen: screens.START,
+
+            potentials: names.filter(poke => poke.generation === 1),
+            generation: 1,  // TODO
             // pokemon: this.randPoke(),
             hidden: true,
-            reveal: new Set(),
 
             currentGuess: '',
             points: points.START,
@@ -79,19 +60,6 @@ class App extends Component {
             pokemon: this.randPoke(),
             loading: false,
         });
-    }
-
-    skipPoke() {
-        if (this.state.points === 0) {
-            this.setState({
-                status: "forbidden",
-            });
-        } else {
-            this.setState((prevState) => ({
-                points: prevState.points + points.SKIP,
-                pokemon: this.randPoke(),
-            }));
-        }
     }
 
     randPokeFromPotentials(potentials) {
