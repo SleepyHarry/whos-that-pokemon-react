@@ -8,6 +8,8 @@ import Score from "./Score";
 
 import "./App.css";
 import ClockBar from "./ClockBar";
+import GuessHistory from "./GuessHistory";
+import colours from "./colours";
 
 
 const points = {
@@ -48,6 +50,7 @@ class GameScreen extends Component {
             startTime: null,
             elapsedTime: 0,
             lastGuessTime: null,
+            guessHistory: [],
 
             initials: '',
         };
@@ -140,6 +143,15 @@ class GameScreen extends Component {
             points: prevState.points + additionalPoints,
             hidden: false,
             lastGuessTime: Date.now(),
+            guessHistory: [
+                {
+                    pokemon: this.state.pokemon,
+                    points: additionalPoints,
+                    correct,
+                    close,
+                },
+                ...prevState.guessHistory,
+            ],
             // status: "correct",
         }));
 
@@ -190,8 +202,8 @@ class GameScreen extends Component {
     render() {
         const TimeRemaining = (props) => {
             let color;
-            if (props.timeRemaining < 16000) color = "#f6a623";
-            if (props.timeRemaining < 6000) color = "#d0011b";
+            if (props.timeRemaining < 16000) color = colours.amber;
+            if (props.timeRemaining < 6000) color = colours.red;
 
             return <span className="time-remaining" style={{color}}>
                 {Math.max(0, Math.floor(props.timeRemaining / 1000))}
@@ -297,9 +309,9 @@ class GameScreen extends Component {
                 <div className="centre-content">
                     <Score className="score score-main" score={this.state.points} length={6}/>
                 </div>
-                {/*<div className="centre-content">*/}
-                    {/*<GuessHistory/>*/}
-                {/*</div>*/}
+                <div className="centre-content">
+                    <GuessHistory guesses={this.state.guessHistory}/>
+                </div>
             </Col>
             {body}
         </div>;

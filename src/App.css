@@ -30,3 +30,14 @@
     margin: 0 auto;
     font-size: 72px;
 }
+
+.guess-history-element {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.guess-history-element canvas {
+    transform: scale(0.5);
+    margin: -25% 0;
+}
