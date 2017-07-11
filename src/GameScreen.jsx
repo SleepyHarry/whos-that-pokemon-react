@@ -7,19 +7,19 @@ import levenshtein from "./levenshtein";
 
 
 const points = {
-    CORRECT: 10,
-    WRONG: -0,
-    CLOSE: -0,
-    SKIP: -5,
-    REVEAL: -2,
-    GEN_CLUE: -2,
-    EVO_CLUE: -4,
+    MAX_CORRECT: 10000,
+    CLOSE_MODIFIER: 0.5,
+    DECAY_FUNC: t => Math.exp(-(t/5000)),
+};
 
-    START: 5,
+const phases = {
+    PREP: Symbol('prep'),
+    GAME: Symbol('game'),
+    DONE: Symbol('done'),
 };
 
 const COUNTDOWN_TIME = 4000;  // allows a second of "GO!"
-const GAME_TIME = 60000;
+const GAME_TIME = 6000;
 
 const fps = 10;
 const tickInterval = 1000 / fps;  // milliseconds
@@ -39,19 +39,23 @@ class GameScreen extends Component {
             currentGuess: '',
             potentials: props.pokes,
 
-            points: points.START,
+            points: 0,
 
             startTime: null,
             elapsedTime: 0,
+            lastGuessTime: null,
         };
 
         this.randPoke = this.randPoke.bind(this);
     }
 
     componentDidMount() {
+        const now = Date.now();
+
         this.setState({
             loading: false,
-            startTime: Date.now(),
+            startTime: now,
+            lastGuessTime: now + COUNTDOWN_TIME,
             pokemon: this.randPoke(),
         });
 
@@ -106,14 +110,23 @@ class GameScreen extends Component {
         return s.toLowerCase().replace(/[^a-z]/g, '');
     }
 
+    calcScore(modifier=1) {
+        const timeDiff = Date.now() - this.state.lastGuessTime;
+
+        return Math.floor(modifier * (points.DECAY_FUNC(timeDiff) * points.MAX_CORRECT));
+    }
+
     onSubmit() {
         const guess = this.clean(this.state.currentGuess);
         const target = this.clean(this.state.pokemon.name);
 
-        if (guess === target) {
+        if (levenshtein(guess, target) <= 2) {  // close to correct
+            const correct = guess === target;
+
             this.setState((prevState) => ({
-                points: prevState.points + points.CORRECT,
+                points: prevState.points + this.calcScore(correct ? 1 : points.CLOSE_MODIFIER),
                 hidden: false,
+                lastGuessTime: Date.now(),
                 // status: "correct",
             }));
 
@@ -129,16 +142,6 @@ class GameScreen extends Component {
                 },
                 500,
             );
-        } else if (levenshtein(guess, target) <= 2) {
-            this.setState((prevState) => ({
-                // status: "close",
-                points: prevState.points + points.CLOSE,
-            }));
-        } else {
-            this.setState((prevState) => ({
-                // status: "nope",
-                points: prevState.points + points.WRONG,
-            }));
         }
     }
 
@@ -154,24 +157,38 @@ class GameScreen extends Component {
         ;
 
         let body;
+        let phase;
 
+        // TODO: Move into `willUpdate` or similar
         if (this.state.elapsedTime < (COUNTDOWN_TIME)) {
             // prepare
+            phase = phases.PREP;
             body = <Col>
                 <h1>{Math.floor((COUNTDOWN_TIME - this.state.elapsedTime) / 1000) || "GO"}!</h1>
             </Col>;
         } else if (this.state.elapsedTime < (COUNTDOWN_TIME + GAME_TIME)) {
             // main game
-            body = <Col xs={8}>
-                {this.state.loading ? null :
-                    <Pokemon
-                        {...this.state.pokemon}
-                        hidden={this.state.hidden}
-                        zoom={6}
-                    />}
-            </Col>;
+            phase = phases.GAME;
+            body = <div>
+                <Col xs={8}>
+                    {this.state.loading ? null :
+                        <Pokemon
+                            {...this.state.pokemon}
+                            hidden={this.state.hidden}
+                            zoom={6}
+                        />}
+                </Col>
+                <Col xs={2}>
+                    {this.state.status ?
+                        <StatusBox option={this.state.status}/> :
+                        null}
+                </Col>
+            </div>;
         } else {
             // game over
+            phase = phases.DONE;
+            clearInterval(this.tickTimerID);
+
             body = <Col>
                 <h1>GAME OVER!</h1>
             </Col>;
@@ -182,44 +199,46 @@ class GameScreen extends Component {
                 <Col xs={3}>
                     <h2>{this.state.points} point{this.state.points === 1 ? "" : "s"}!</h2>
                 </Col>
-                <Col xs={6}/>
-                <TimeRemaining
-                    timeRemaining={GAME_TIME - (this.state.elapsedTime - COUNTDOWN_TIME)}
-                />
+                <Col xs={3}/>
+                <Col xs={3}>
+                    Could get: {this.calcScore()}
+                </Col>
+                <Col xs={3}>
+                    <TimeRemaining
+                        timeRemaining={GAME_TIME - (this.state.elapsedTime - COUNTDOWN_TIME)}
+                    />
+                </Col>
             </Row>
             <Row>
                 {body}
-                <Col xs={2}>
-                    {this.state.status ?
-                        <StatusBox option={this.state.status}/> :
-                        null}
-                </Col>
             </Row>
-            <Row>
-                <Col xs={4}>
-                    <FormGroup validationState={null}>
-                        <FormControl
-                            type="text"
-                            value={this.state.currentGuess}
-                            placeholder="Your guess"
-                            inputRef={(input) => {
-                                this.guessInput = input;
-                            }}
-                            onChange={this.onChange.bind(this)}
-                            onKeyUp={this.onKeyUp.bind(this)}
-                            disabled={!this.state.hidden}
-                        />
-                    </FormGroup>
-                </Col>
-                <Col xs={2}>
-                    <Button
-                        type="submit"
-                        onClick={this.onSubmit.bind(this)}
-                    >
-                        Guess
-                    </Button>
-                </Col>
-            </Row>
+            {phase === phases.GAME &&
+                <Row>
+                    <Col xs={4}>
+                        <FormGroup validationState={null}>
+                            <FormControl
+                                type="text"
+                                value={this.state.currentGuess}
+                                placeholder="Your guess"
+                                inputRef={(input) => {
+                                    this.guessInput = input;
+                                }}
+                                onChange={this.onChange.bind(this)}
+                                onKeyUp={this.onKeyUp.bind(this)}
+                                disabled={!this.state.hidden}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col xs={2}>
+                        <Button
+                            type="submit"
+                            onClick={this.onSubmit.bind(this)}
+                        >
+                            Guess
+                        </Button>
+                    </Col>
+                </Row>
+            }
         </div>;
     }
 }
