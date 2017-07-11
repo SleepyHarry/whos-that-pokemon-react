@@ -22,7 +22,7 @@ const phases = {
 };
 
 const COUNTDOWN_TIME = 4000;  // allows a second of "GO!"
-const GAME_TIME = 600000;
+const GAME_TIME = 60000;
 
 const fps = 10;
 const tickInterval = 1000 / fps;  // milliseconds
