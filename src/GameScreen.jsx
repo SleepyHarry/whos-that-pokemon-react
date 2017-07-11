@@ -282,7 +282,7 @@ class GameScreen extends Component {
                 <Col xs={3}>
                     <div className="centre-content">
                         <TimeRemaining
-                            timeRemaining={GAME_TIME - (this.state.elapsedTime - COUNTDOWN_TIME)}
+                            timeRemaining={GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME)}
                         />
                     </div>
                     {/*<div className="centre-content">*/}
