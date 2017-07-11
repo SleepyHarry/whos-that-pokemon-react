@@ -181,11 +181,15 @@ class GameScreen extends Component {
     }
 
     render() {
-        const TimeRemaining = (props) =>
-            <span className="time-remaining">
+        const TimeRemaining = (props) => {
+            let color;
+            if (props.timeRemaining < 16000) color = "#f6a623";
+            if (props.timeRemaining < 6000) color = "#d0011b";
+
+            return <span className="time-remaining" style={{color}}>
                 {Math.max(0, Math.floor(props.timeRemaining / 1000))}
-            </span>
-        ;
+            </span>;
+        };
 
         let body;
         let phase;
