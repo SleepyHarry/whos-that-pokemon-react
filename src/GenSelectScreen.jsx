@@ -35,6 +35,7 @@ class GenSelectScreen extends Component {
             {this.generations.map((gen) =>
                 <Button
                     key={gen}
+                    active={gen === this.state.chosenGen}
                     onClick={this.onSelect.bind(this, gen)}
                 >
                     {gen}
