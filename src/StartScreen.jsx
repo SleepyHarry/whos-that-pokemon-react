@@ -10,7 +10,7 @@ class StartScreen extends Component {
         return <div>
             <WtpTitle/>
             <Row>
-                <Col xs={9}>
+                <Col xs={9} className="centre-content">
                     <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>
                 </Col>
                 <Col xs={3}>

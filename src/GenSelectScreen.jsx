@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Button} from "react-bootstrap";
 import WtpTitle from "./WtpTitle";
+import Carousel from "./Carousel";
 
 
 class GenSelectScreen extends Component {
@@ -11,9 +12,17 @@ class GenSelectScreen extends Component {
         this.generations = new Array(...new Set(props.pokes.map(poke => poke.generation))).sort();
 
         this.state = {
-            chosenGen: null,
+            chosenGen: 1,
         };
     }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.lastScore) {
+            this.setState({
+                chosenGen: nextProps.lastScore.generation,
+            });
+        }
+    }rsl
 
     onSelect(gen) {
         this.setState({chosenGen: gen});
@@ -31,23 +40,30 @@ class GenSelectScreen extends Component {
     render() {
         return <div>
             <WtpTitle/>
-            {/*<Carousel generation={this.props.generation}/>*/}
-            {this.generations.map((gen) =>
-                <Button
-                    key={gen}
-                    active={gen === this.state.chosenGen}
-                    onClick={this.onSelect.bind(this, gen)}
-                >
-                    {gen}
-                </Button>
-            )}
+            <div className="centre-content">
+                <Carousel pokes={this.props.pokes.filter(poke => poke.generation === this.state.chosenGen)}/>
+            </div>
+
+            <div className="centre-content">
+                {this.generations.map((gen) =>
+                    <Button
+                        key={gen}
+                        active={gen === this.state.chosenGen}
+                        onClick={this.onSelect.bind(this, gen)}
+                    >
+                        {gen}
+                    </Button>
+                )}
+            </div>
             <br/>
-            <Button
-                onClick={this.onClick.bind(this)}
-                disabled={this.state.chosenGen === null}
-            >
-                START
-            </Button>
+            <div className="centre-content">
+                <Button
+                    onClick={this.onClick.bind(this)}
+                    disabled={this.state.chosenGen === null}
+                >
+                    START
+                </Button>
+            </div>
         </div>
     }
 }
