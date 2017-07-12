@@ -10,8 +10,16 @@ class Leaderboard extends Component {
 
         this.state = {
             generations: [],
-            generation: 1,  // TODO: Based on previous pick
+            generation: 1,
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.lastScore) {
+            this.setState({
+                generation: nextProps.lastScore.generation,
+            });
+        }
     }
 
     componentDidMount() {
