@@ -285,8 +285,6 @@ class GameScreen extends Component {
                             <FormControl
                                 key="initials-input"
                                 componentClass={InitialsInput}
-                                type="text"
-                                placeholder="Your initials"
                                 submit={this.onInitialsSubmit.bind(this)}
                             />
                         </FormGroup>
