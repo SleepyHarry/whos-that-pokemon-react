@@ -22,7 +22,14 @@ class InitialsInput extends Component {
 
     onKeyUp(e) {
         if (e.key === "Enter") {
-            this.props.submit(this.state.value);
+            this.submit(this.state.value);
+        }
+    }
+
+    submit(value) {
+        // TODO: Warn / notify when brick
+        if (value.length === 3) {
+            this.props.submit(value);
         }
     }
 
@@ -57,7 +64,7 @@ class InitialsInput extends Component {
             </div>
             <Button
                 type="submit"
-                onClick={() => { this.props.submit(this.state.value); }}
+                onClick={() => { this.submit(this.state.value); }}
             >
                 Submit
             </Button>
