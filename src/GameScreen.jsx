@@ -87,7 +87,12 @@ class GameScreen extends Component {
     }
 
     tick() {
-        const elapsedTime = Date.now() - this.state.startTime;
+        let elapsedTime = Date.now() - this.state.startTime;
+
+        if (this.state.currentGuess === "__end__") {
+            // useful override for dev. Ends game.
+            elapsedTime = COUNTDOWN_TIME + GAME_TIME;
+        }
 
         // calculate phase
         let phase;
