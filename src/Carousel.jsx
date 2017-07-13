@@ -41,7 +41,7 @@ class Carousel extends Component {
         const shuffled = shuffle(pokes);
         return [  // overlap slightly to allow us to "loop" seamlessly
             ...shuffled,
-            ...shuffled.slice(0, perLine),
+            ...shuffled.slice(0, perLine * 2),
         ]
     }
 
