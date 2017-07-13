@@ -289,14 +289,6 @@ class GameScreen extends Component {
                             />
                         </FormGroup>
                     </Col>
-                    {/*<Col xs={2}>*/}
-                        {/*<Button*/}
-                            {/*type="submit"*/}
-                            {/*onClick={this.onInitialsSubmit.bind(this)}*/}
-                        {/*>*/}
-                            {/*Submit*/}
-                        {/*</Button>*/}
-                    {/*</Col>*/}
                 </div>;
                 break;
             default:
