@@ -50,6 +50,7 @@ class InitialsInput extends Component {
                     ref={(input) => { this.input = input; }}
                     value={this.state.value}
                     onFocus={() => { this.forceUpdate(); }}
+                    onBlur={() => { this.forceUpdate(); }}
                     onChange={this.onChange.bind(this)}
                     onKeyUp={this.onKeyUp.bind(this)}
                 />
