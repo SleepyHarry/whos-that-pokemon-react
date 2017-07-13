@@ -6,6 +6,10 @@ import Score from "./Score";
 
 
 class GuessHistory extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.guesses.length !== nextProps.guesses.length;
+    }
+
     render() {
         return <div style={{width: "100%"}}>
             {this.props.guesses.slice(0, 10).map(guess =>

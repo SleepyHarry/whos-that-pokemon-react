@@ -81,6 +81,14 @@ export default class Pokemon extends Component {
         onClick: (() => {}),
     };
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return (
+            this.props.number !== nextProps.number ||
+            this.props.hidden !== nextProps.hidden ||
+            this.props.zoom !== nextProps.zoom
+        );
+    }
+
     drawPoke() {
         let _this = this;
 

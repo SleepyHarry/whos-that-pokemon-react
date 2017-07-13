@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 
 
 class Score extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.score !== nextProps.score;
+    }
+
     render() {
         const score = this.props.score + "";
         const pad = "0".repeat(Math.max(0, this.props.length - score.length));
