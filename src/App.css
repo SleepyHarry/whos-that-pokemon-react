@@ -27,6 +27,15 @@
     display: inline;
 }
 
+.carousel {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 96px;  /* height of poké at zoom level 1 */
+    overflow: hidden;
+}
+
 .time-remaining {
     margin: 0 auto;
     font-size: 72px;

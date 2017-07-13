@@ -4,7 +4,7 @@ import {shuffle} from "./util";
 import Pokemon from "./Pokemon";
 
 
-const perLine = 10;
+const perLine = 9;
 
 class Carousel extends Component {
     constructor(props) {
@@ -46,8 +46,11 @@ class Carousel extends Component {
     }
 
     render() {
-        return <div style={{display: "flex"}}>
-            {this.state.pokes.slice(this.state.offset, this.state.offset + perLine).map(poke =>
+        // load two lines so that the first line is always preloaded
+        const lines = this.state.pokes.slice(this.state.offset, this.state.offset + perLine * 2);
+
+        return <div className="carousel">
+            {lines.map((poke) =>
                 <Pokemon
                     key={poke.number}
                     {...poke}
