@@ -254,6 +254,7 @@ class GameScreen extends Component {
                     <Col xs={4}>
                         <FormGroup validationState={null}>
                             <FormControl
+                                key="guess-input"
                                 type="text"
                                 value={this.state.currentGuess}
                                 placeholder="Your guess"
@@ -286,6 +287,7 @@ class GameScreen extends Component {
                     <Col xs={4}>
                         <FormGroup validationState={null}>
                             <FormControl
+                                key="initials-input"
                                 type="text"
                                 value={this.state.initials}
                                 placeholder="Your initials"
