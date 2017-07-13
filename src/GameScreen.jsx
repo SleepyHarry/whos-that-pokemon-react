@@ -205,13 +205,9 @@ class GameScreen extends Component {
         }
     }
 
-    onInitialsChange(e) {
-        this.setState({initials: e.target.value.slice(0, 3).toUpperCase()});
-    }
-
-    onInitialsSubmit() {
+    onInitialsSubmit(initials) {
         this.props.submitScore({
-            initials: this.state.initials,
+            initials: initials,
             points: this.state.points,
         });
 
@@ -221,12 +217,6 @@ class GameScreen extends Component {
                 generation: null,
             },
         );
-    }
-
-    onInitialsKeyUp(e) {
-        if (e.key === "Enter") {
-            this.onInitialsSubmit();
-        }
     }
 
     render() {
@@ -296,24 +286,19 @@ class GameScreen extends Component {
                                 key="initials-input"
                                 componentClass={InitialsInput}
                                 type="text"
-                                value={this.state.initials}
                                 placeholder="Your initials"
-                                inputRef={(input) => {
-                                    this.initialsInput = input;
-                                }}
-                                onChange={this.onInitialsChange.bind(this)}
-                                onKeyUp={this.onInitialsKeyUp.bind(this)}
+                                submit={this.onInitialsSubmit.bind(this)}
                             />
                         </FormGroup>
                     </Col>
-                    <Col xs={2}>
-                        <Button
-                            type="submit"
-                            onClick={this.onInitialsSubmit.bind(this)}
-                        >
-                            Submit
-                        </Button>
-                    </Col>
+                    {/*<Col xs={2}>*/}
+                        {/*<Button*/}
+                            {/*type="submit"*/}
+                            {/*onClick={this.onInitialsSubmit.bind(this)}*/}
+                        {/*>*/}
+                            {/*Submit*/}
+                        {/*</Button>*/}
+                    {/*</Col>*/}
                 </div>;
                 break;
             default:
