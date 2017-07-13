@@ -30,6 +30,7 @@ class InitialsInput extends Component {
         const val = this.state.value + '___'.slice(this.state.value.length);
 
         return <div className="initials-input">
+            <span>Enter initials:</span>
             <div className="initials-input-input">
                 {val.split('').map((c, i) => {
                     let classes = [];

@@ -53,11 +53,11 @@
 }
 
 .initials-input {
-    font-size: 92px;
 }
 
 .initials-input-input {
     position: relative;
+    font-size: 92px;
 }
 
 .initials-input .faded {
