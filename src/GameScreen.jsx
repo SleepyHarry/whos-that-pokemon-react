@@ -75,6 +75,13 @@ class GameScreen extends Component {
         );
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.phase === phases.PREP && this.state.phase === phases.GAME) {
+            // just started the game
+            this.guessInput.focus();
+        }
+    }
+
     componentWillUnmount() {
         clearInterval(this.tickTimerID);
     }
