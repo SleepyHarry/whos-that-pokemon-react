@@ -10,6 +10,7 @@ import "./App.css";
 import ClockBar from "./ClockBar";
 import GuessHistory from "./GuessHistory";
 import colours from "./colours";
+import InitialsInput from "./InitialsInput";
 
 
 const points = {
@@ -290,9 +291,10 @@ class GameScreen extends Component {
                         <h1>GAME OVER!</h1>
                     </Col>
                     <Col xs={4}>
-                        <FormGroup validationState={null}>
+                        <FormGroup>
                             <FormControl
                                 key="initials-input"
+                                componentClass={InitialsInput}
                                 type="text"
                                 value={this.state.initials}
                                 placeholder="Your initials"
