@@ -248,9 +248,10 @@ class GameScreen extends Component {
                             />}
                     </Col>
                     <Col xs={4}>
-                        <FormGroup validationState={null}>
+                        <FormGroup>
                             <FormControl
                                 key="guess-input"
+                                className="guess-input"
                                 type="text"
                                 value={this.state.currentGuess}
                                 placeholder="Your guess"

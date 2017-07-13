@@ -36,6 +36,19 @@
     overflow: hidden;
 }
 
+.guess-input {
+    border: none;
+    box-shadow: none;
+}
+
+.guess-input:focus {
+    box-shadow: none;
+}
+
+.guess-input[disabled] {
+    background-color: white;
+}
+
 .time-remaining {
     margin: 0 auto;
     font-size: 72px;
