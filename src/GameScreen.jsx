@@ -37,6 +37,7 @@ class GameScreen extends Component {
 
         this.state = {
             loading: true,
+            phase: phases.PREP,
 
             pokemon: null,
 
@@ -79,8 +80,24 @@ class GameScreen extends Component {
     }
 
     tick() {
+        const elapsedTime = Date.now() - this.state.startTime;
+
+        // calculate phase
+        let phase;
+        if (elapsedTime < (COUNTDOWN_TIME)) {
+            // prepare
+            phase = phases.PREP;
+        } else if (elapsedTime < (COUNTDOWN_TIME + GAME_TIME)) {
+            // main game
+            phase = phases.GAME;
+        } else {
+            // game over
+            phase = phases.DONE;
+        }
+
         this.setState({
-            elapsedTime: Date.now() - this.state.startTime,
+            phase,
+            elapsedTime,
         });
     }
 
@@ -211,83 +228,81 @@ class GameScreen extends Component {
         };
 
         let body;
-        let phase;
+        switch (this.state.phase) {
+            case phases.PREP:
+                body = <Col>
+                    <h1>{Math.floor((COUNTDOWN_TIME - this.state.elapsedTime) / 1000) || "GO"}!</h1>
+                </Col>;
+                break;
+            case phases.GAME:
+                body = <div>
+                    <Col xs={9}>
+                        {this.state.loading ? null :
+                            <Pokemon
+                                {...this.state.pokemon}
+                                hidden={this.state.hidden}
+                                zoom={6}
+                            />}
+                    </Col>
+                    <Col xs={4}>
+                        <FormGroup validationState={null}>
+                            <FormControl
+                                type="text"
+                                value={this.state.currentGuess}
+                                placeholder="Your guess"
+                                inputRef={(input) => {
+                                    this.guessInput = input;
+                                }}
+                                onChange={this.onPokeChange.bind(this)}
+                                onKeyUp={this.onPokeKeyUp.bind(this)}
+                                disabled={!this.state.hidden}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col xs={2}>
+                        <Button
+                            type="submit"
+                            onClick={this.onPokeSubmit.bind(this)}
+                        >
+                            Guess
+                        </Button>
+                    </Col>
+                </div>;
+                break;
+            case phases.DONE:
+                clearInterval(this.tickTimerID);
 
-        // TODO: Move into `willUpdate` or similar
-        if (this.state.elapsedTime < (COUNTDOWN_TIME)) {
-            // prepare
-            phase = phases.PREP;
-            body = <Col>
-                <h1>{Math.floor((COUNTDOWN_TIME - this.state.elapsedTime) / 1000) || "GO"}!</h1>
-            </Col>;
-        } else if (this.state.elapsedTime < (COUNTDOWN_TIME + GAME_TIME)) {
-            // main game
-            phase = phases.GAME;
-            body = <div>
-                <Col xs={9}>
-                    {this.state.loading ? null :
-                        <Pokemon
-                            {...this.state.pokemon}
-                            hidden={this.state.hidden}
-                            zoom={6}
-                        />}
-                </Col>
-                <Col xs={4}>
-                    <FormGroup validationState={null}>
-                        <FormControl
-                            type="text"
-                            value={this.state.currentGuess}
-                            placeholder="Your guess"
-                            inputRef={(input) => {
-                                this.guessInput = input;
-                            }}
-                            onChange={this.onPokeChange.bind(this)}
-                            onKeyUp={this.onPokeKeyUp.bind(this)}
-                            disabled={!this.state.hidden}
-                        />
-                    </FormGroup>
-                </Col>
-                <Col xs={2}>
-                    <Button
-                        type="submit"
-                        onClick={this.onPokeSubmit.bind(this)}
-                    >
-                        Guess
-                    </Button>
-                </Col>
-            </div>;
-        } else {
-            // game over
-            phase = phases.DONE;
-            clearInterval(this.tickTimerID);
-
-            body = <div>
-                <Col>
-                    <h1>GAME OVER!</h1>
-                </Col>
-                <Col xs={4}>
-                    <FormGroup validationState={null}>
-                        <FormControl
-                            type="text"
-                            value={this.state.initials}
-                            placeholder="Your initials"
-                            inputRef={(input) => {
-                                this.initialsInput = input;
-                            }}
-                            onChange={this.onInitialsChange.bind(this)}
-                            onKeyUp={this.onInitialsKeyUp.bind(this)}
-                        />
-                    </FormGroup>
-                </Col>
-                <Col xs={2}>
-                    <Button
-                        type="submit"
-                        onClick={this.onInitialsSubmit.bind(this)}
-                    >
-                        Guess
-                    </Button>
-                </Col>
-            </div>;
+                body = <div>
+                    <Col>
+                        <h1>GAME OVER!</h1>
+                    </Col>
+                    <Col xs={4}>
+                        <FormGroup validationState={null}>
+                            <FormControl
+                                type="text"
+                                value={this.state.initials}
+                                placeholder="Your initials"
+                                inputRef={(input) => {
+                                    this.initialsInput = input;
+                                }}
+                                onChange={this.onInitialsChange.bind(this)}
+                                onKeyUp={this.onInitialsKeyUp.bind(this)}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col xs={2}>
+                        <Button
+                            type="submit"
+                            onClick={this.onInitialsSubmit.bind(this)}
+                        >
+                            Guess
+                        </Button>
+                    </Col>
+                </div>;
+                break;
+            default:
+                console.error('Unknown game phase!');
+                break;
         }
 
         const timeRemaining = GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME);
