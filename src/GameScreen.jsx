@@ -304,7 +304,7 @@ class GameScreen extends Component {
                             type="submit"
                             onClick={this.onInitialsSubmit.bind(this)}
                         >
-                            Guess
+                            Submit
                         </Button>
                     </Col>
                 </div>;
