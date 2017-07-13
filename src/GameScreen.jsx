@@ -200,7 +200,7 @@ class GameScreen extends Component {
     }
 
     onInitialsChange(e) {
-        this.setState({initials: e.target.value});
+        this.setState({initials: e.target.value.slice(0, 3).toUpperCase()});
     }
 
     onInitialsSubmit() {
