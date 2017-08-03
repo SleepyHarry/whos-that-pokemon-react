@@ -51,8 +51,10 @@ class Leaderboard extends Component {
         ).indexOf(this.props.lastScore.id) !== -1;
 
         return <div>
-            <div>
+            <div className="centre-content">
                 <h4>GENERATION</h4>
+            </div>
+            <div className="spaced-content">
                 {this.state.generations.map(gen =>
                     <ArcadeButton
                         key={gen}

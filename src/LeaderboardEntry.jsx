@@ -5,13 +5,13 @@ import Score from "./Score";
 
 const LeaderboardEntry = (props) => {
     const rank = props.rank < 10 ?
-        <span>&nbsp;{props.rank}</span> :
-        <span>{props.rank}</span>;
+        <span>&nbsp;{props.rank}&nbsp;</span> :
+        <span>&nbsp;{props.rank}</span>;
 
     return <div
-        className={props.distinguish ? "distinguished" : ""}
+        className={"spaced-content " + (props.distinguish ? "distinguished" : "")}
     >
-        {rank} <Score className="score score-leaderboard" score={props.children.score} length={6}/> {props.children.initials}
+        {rank} <Score className="score score-leaderboard" score={props.children.score} length={6}/> {props.children.initials}&nbsp;
     </div>;
 };
 

@@ -1,3 +1,7 @@
+.container {
+    width: 960px!important;
+}
+
 .mode-revealing {
     cursor: zoom-in;
 }
@@ -17,6 +21,11 @@
 .centre-content {
     display: flex;
     justify-content: center;
+}
+
+.spaced-content {
+    display: flex;
+    justify-content: space-between;
 }
 
 .arcade-button {
