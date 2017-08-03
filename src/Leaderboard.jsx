@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Button} from "react-bootstrap";
 import LeaderboardEntry from "./LeaderboardEntry";
+import ArcadeButton from "./ArcadeButton";
 
 
 class Leaderboard extends Component {
@@ -54,13 +54,13 @@ class Leaderboard extends Component {
             <div>
                 <h4>GENERATION</h4>
                 {this.state.generations.map(gen =>
-                    <Button
+                    <ArcadeButton
                         key={gen}
                         active={gen === this.state.generation}
                         onClick={this.onSelectGen.bind(this, gen)}
                     >
                         {gen}
-                    </Button>
+                    </ArcadeButton>
                 )}
             </div>
             {leaderboard.map((entry, i) =>

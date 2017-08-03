@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Button, Col, Row} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 import Leaderboard from "./Leaderboard";
 import WtpTitle from "./WtpTitle";
+import ArcadeButton from "./ArcadeButton";
 
 
 class StartScreen extends Component {
@@ -11,7 +12,7 @@ class StartScreen extends Component {
             <WtpTitle/>
             <Row>
                 <Col xs={9} className="centre-content">
-                    <Button onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</Button>
+                    <ArcadeButton onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</ArcadeButton>
                 </Col>
                 <Col xs={3}>
                     <Leaderboard

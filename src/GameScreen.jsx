@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Button, Col, FormControl, FormGroup, Row} from "react-bootstrap";
+import {Col, FormControl, FormGroup} from "react-bootstrap";
 import Pokemon from "./Pokemon";
 import levenshtein from "./levenshtein";
 import WtpTitle from "./WtpTitle";
@@ -11,6 +11,7 @@ import ClockBar from "./ClockBar";
 import GuessHistory from "./GuessHistory";
 import colours from "./colours";
 import InitialsInput from "./InitialsInput";
+import ArcadeButton from "./ArcadeButton";
 
 
 const points = {
@@ -265,12 +266,12 @@ class GameScreen extends Component {
                         </FormGroup>
                     </Col>
                     <Col xs={2}>
-                        <Button
+                        <ArcadeButton
                             type="submit"
                             onClick={this.onPokeSubmit.bind(this)}
                         >
                             Guess
-                        </Button>
+                        </ArcadeButton>
                     </Col>
                 </div>;
                 break;

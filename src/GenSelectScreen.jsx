@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Button} from "react-bootstrap";
 import WtpTitle from "./WtpTitle";
 import Carousel from "./Carousel";
+import ArcadeButton from "./ArcadeButton";
 
 
 class GenSelectScreen extends Component {
@@ -46,23 +46,23 @@ class GenSelectScreen extends Component {
 
             <div className="centre-content">
                 {this.generations.map((gen) =>
-                    <Button
+                    <ArcadeButton
                         key={gen}
                         active={gen === this.state.chosenGen}
                         onClick={this.onSelect.bind(this, gen)}
                     >
                         {gen}
-                    </Button>
+                    </ArcadeButton>
                 )}
             </div>
             <br/>
             <div className="centre-content">
-                <Button
+                <ArcadeButton
                     onClick={this.onClick.bind(this)}
                     disabled={this.state.chosenGen === null}
                 >
                     START
-                </Button>
+                </ArcadeButton>
             </div>
         </div>
     }

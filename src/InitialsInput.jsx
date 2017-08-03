@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Button} from "react-bootstrap";
+import ArcadeButton from "./ArcadeButton";
 
 
 class InitialsInput extends Component {
@@ -62,12 +62,12 @@ class InitialsInput extends Component {
                     onKeyUp={this.onKeyUp.bind(this)}
                 />
             </div>
-            <Button
+            <ArcadeButton
                 type="submit"
                 onClick={() => { this.submit(this.state.value); }}
             >
                 Submit
-            </Button>
+            </ArcadeButton>
         </div>
     }
 }
