@@ -26,6 +26,16 @@ class Leaderboard extends Component {
         this.setState({
             generations: new Array(...new Set(this.props.leaderboard.map(score => score.generation))).sort(),
         });
+
+        this.timerID = setInterval(() => {
+            this.setState((prevState) => ({
+                generation: (prevState.generation % this.state.generations.length) + 1,  // mod first because 1-indexed gens
+            }));
+        }, 10000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
     onSelectGen(generation) {
