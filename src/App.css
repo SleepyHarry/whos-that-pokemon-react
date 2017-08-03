@@ -44,7 +44,9 @@
     background: transparent;
 }
 
-.leaderboard-gen-button {
+.leaderboard-gen-button,
+.leaderboard-gen-button:focus
+{
     color: #9b9b9b;
 }
 .leaderboard-gen-button.active {
