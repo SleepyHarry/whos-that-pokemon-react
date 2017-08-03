@@ -5,7 +5,15 @@ import {Button} from "react-bootstrap";
 
 class ArcadeButton extends Component {
     render() {
-        return <Button {...this.props}>{this.props.children}</Button>;
+        let {className = "", ...props} = this.props;
+        className += " arcade-button";
+
+        return <Button
+            className={className}
+            {...props}
+        >
+            {props.children}
+        </Button>;
     }
 }
 

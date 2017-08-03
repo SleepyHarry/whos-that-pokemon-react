@@ -56,6 +56,7 @@ class Leaderboard extends Component {
                 {this.state.generations.map(gen =>
                     <ArcadeButton
                         key={gen}
+                        className="leaderboard-gen-button"
                         active={gen === this.state.generation}
                         onClick={this.onSelectGen.bind(this, gen)}
                     >

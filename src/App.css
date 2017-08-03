@@ -19,6 +19,39 @@
     justify-content: center;
 }
 
+.arcade-button {
+    border-color: transparent;
+    background: transparent;
+}
+.arcade-button:hover {
+    border-color: transparent;
+    background: transparent;
+    transform: scale(1.1);
+}
+.arcade-button:focus {
+    outline: none!important;
+    border-color: transparent!important;
+    background: transparent!important;
+    box-shadow: none;
+}
+.arcade-button.active {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+.arcade-button.active:hover {
+    border-color: transparent;
+    background: transparent;
+}
+
+.leaderboard-gen-button {
+    color: #9b9b9b;
+}
+.leaderboard-gen-button.active {
+    /*color: #417505;*/
+    color: black;
+}
+
 .score-main {
     font-size: 34px;
 }
