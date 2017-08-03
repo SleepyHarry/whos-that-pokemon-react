@@ -4,6 +4,7 @@ import {Col, Row} from "react-bootstrap";
 import Leaderboard from "./Leaderboard";
 import WtpTitle from "./WtpTitle";
 import ArcadeButton from "./ArcadeButton";
+import colors from "./colours";
 
 
 class StartScreen extends Component {
@@ -12,7 +13,12 @@ class StartScreen extends Component {
             <WtpTitle/>
             <Row>
                 <Col xs={9} className="centre-content">
-                    <ArcadeButton onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}>START</ArcadeButton>
+                    <ArcadeButton
+                        style={{color: colors.green}}
+                        onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}
+                    >
+                        START
+                    </ArcadeButton>
                 </Col>
                 <Col xs={3}>
                     <Leaderboard
