@@ -11,7 +11,7 @@ const LeaderboardEntry = (props) => {
     return <div
         className={props.distinguish ? "distinguished" : ""}
     >
-        {rank} {props.children.initials} <Score className="score score-leaderboard" score={props.children.score} length={6}/>
+        {rank} <Score className="score score-leaderboard" score={props.children.score} length={6}/> {props.children.initials}
     </div>;
 };
 
