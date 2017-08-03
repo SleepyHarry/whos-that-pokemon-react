@@ -48,6 +48,7 @@ class GenSelectScreen extends Component {
                 {this.generations.map((gen) =>
                     <ArcadeButton
                         key={gen}
+                        className="gen-choice-button"
                         active={gen === this.state.chosenGen}
                         onClick={this.onSelect.bind(this, gen)}
                     >
@@ -58,6 +59,7 @@ class GenSelectScreen extends Component {
             <br/>
             <div className="centre-content">
                 <ArcadeButton
+                    className="start-button"
                     onClick={this.onClick.bind(this)}
                     disabled={this.state.chosenGen === null}
                 >

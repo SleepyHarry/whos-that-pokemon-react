@@ -50,8 +50,21 @@
     color: #9b9b9b;
 }
 .leaderboard-gen-button.active {
-    /*color: #417505;*/
     color: black;
+}
+
+.start-button {
+    color: #417505!important;
+}
+
+.gen-choice-button,
+.gen-choice-button:hover,
+.gen-choice-button:focus
+{
+    color: #9b9b9b!important;
+}
+.gen-choice-button.active {
+    color: #417505!important;
 }
 
 .score-main {
