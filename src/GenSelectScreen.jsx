@@ -22,7 +22,7 @@ class GenSelectScreen extends Component {
                 chosenGen: nextProps.lastScore.generation,
             });
         }
-    }rsl
+    }
 
     onSelect(gen) {
         this.setState({chosenGen: gen});
