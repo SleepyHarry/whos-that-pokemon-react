@@ -5,14 +5,17 @@ import colours from "./colours";
 import Score from "./Score";
 
 
+const HISTORY_LIMIT = 8;
+
 class GuessHistory extends Component {
+
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.guesses.length !== nextProps.guesses.length;
     }
 
     render() {
         return <div style={{width: "100%"}}>
-            {this.props.guesses.slice(0, 10).map(guess =>
+            {this.props.guesses.slice(0, HISTORY_LIMIT).map(guess =>
                 <div key={guess.pokemon.id} className="guess-history-element">
                     <Pokemon {...guess.pokemon}/>
                     <div>
