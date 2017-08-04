@@ -11,7 +11,7 @@ class StartScreen extends Component {
         return <div>
             <WtpTitle/>
             <Row>
-                <Col xs={8} className="centre-content" style={{height: 293}}>
+                <Col xs={8} className="centre-content main-content">
                     <ArcadeButton
                         className="start-button"
                         onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}

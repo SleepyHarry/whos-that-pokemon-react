@@ -2,6 +2,12 @@
     width: 960px!important;
 }
 
+.main-content {
+    height: 293px;
+    align-items: center;
+    flex-direction: column;
+}
+
 .mode-revealing {
     cursor: zoom-in;
 }

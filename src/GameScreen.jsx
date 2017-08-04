@@ -234,9 +234,11 @@ class GameScreen extends Component {
         let body;
         switch (this.state.phase) {
             case phases.PREP:
-                body = <Col>
-                    <h1>{Math.floor((COUNTDOWN_TIME - this.state.elapsedTime) / 1000) || "GO"}!</h1>
-                </Col>;
+                body = <div>
+                    <Col className="centre-content main-content">
+                        <h1>{Math.floor((COUNTDOWN_TIME - this.state.elapsedTime) / 1000) || "GO"}!</h1>
+                    </Col>
+                </div>;
                 break;
             case phases.GAME:
                 body = <div>
@@ -279,10 +281,10 @@ class GameScreen extends Component {
                 clearInterval(this.tickTimerID);
 
                 body = <div>
-                    <Col>
-                        <h1>GAME OVER!</h1>
-                    </Col>
-                    <Col xs={4}>
+                    <Col className="centre-content main-content">
+                        <h1>TIME'S UP!</h1>
+                    {/*</Col>*/}
+                    {/*<Col xs={4}>*/}
                         <FormGroup>
                             <FormControl
                                 key="initials-input"
