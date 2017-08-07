@@ -40,31 +40,44 @@ class GenSelectScreen extends Component {
     render() {
         return <div>
             <WtpTitle/>
-            <div className="centre-content">
-                <Carousel pokes={this.props.pokes.filter(poke => poke.generation === this.state.chosenGen)}/>
-            </div>
-
-            <div className="centre-content">
-                {this.generations.map((gen) =>
+            <h2
+                className="centre-content"
+                style={{
+                    margin: "70px 0",
+                }}
+            >
+                SELECT GENERATION
+            </h2>
+            <div>
+                <div className="centre-content">
+                    <Carousel pokes={this.props.pokes.filter(poke => poke.generation === this.state.chosenGen)}/>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div className="centre-content gen-choice-button-container">
+                    {this.generations.map((gen) =>
+                        <ArcadeButton
+                            key={gen}
+                            className="gen-choice-button"
+                            active={gen === this.state.chosenGen}
+                            onClick={this.onSelect.bind(this, gen)}
+                        >
+                            {gen}
+                        </ArcadeButton>
+                    )}
+                </div>
+                <br/>
+                <br/>
+                <div className="centre-content">
                     <ArcadeButton
-                        key={gen}
-                        className="gen-choice-button"
-                        active={gen === this.state.chosenGen}
-                        onClick={this.onSelect.bind(this, gen)}
+                        className="start-button"
+                        onClick={this.onClick.bind(this)}
+                        disabled={this.state.chosenGen === null}
                     >
-                        {gen}
+                        START
                     </ArcadeButton>
-                )}
-            </div>
-            <br/>
-            <div className="centre-content">
-                <ArcadeButton
-                    className="start-button"
-                    onClick={this.onClick.bind(this)}
-                    disabled={this.state.chosenGen === null}
-                >
-                    START
-                </ArcadeButton>
+                </div>
             </div>
         </div>
     }
