@@ -33,6 +33,14 @@ def leaderboard():
     if request.method == 'POST':
         score = request.json
 
+        # validate initials
+        initials = score['initials']
+        if len(initials) != 3 or ' ' in initials:
+            return jsonify({
+                'error': True,
+                'message': 'invalid initials',
+            }), 400
+
         new_score = Leaderboard(
             generation=score['generation'],
             score=score['points'],

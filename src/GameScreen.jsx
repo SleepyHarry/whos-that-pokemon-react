@@ -208,16 +208,20 @@ class GameScreen extends Component {
 
     onInitialsSubmit(initials) {
         this.props.submitScore({
-            initials: initials,
+            initials,
             points: this.state.points,
-        });
-
-        this.props.goToScreen(
-            this.props.screens.START,
-            {
-                generation: null,
-            },
-        );
+        })
+            .then(() => {
+                this.props.goToScreen(
+                    this.props.screens.START,
+                    {
+                        generation: null,
+                    },
+                );
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     render() {

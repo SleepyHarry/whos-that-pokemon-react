@@ -56,7 +56,7 @@ class App extends Component {
             generation: this.state.generation,
         };
 
-        fetch(
+        return fetch(
             '/api/leaderboard/',
             {
                 method: 'POST',
@@ -67,14 +67,28 @@ class App extends Component {
                 body: JSON.stringify(newScore),
             },
         )
+            .then(response => {
+                if (response.status === 400) {
+                    // NB: This should only happen if the user is trying
+                    //     to get around the client-side validation on the
+                    //     initials input, so not having a visual brick is
+                    //     fine.
+
+                    // currently only reason for a 400
+                    throw new Error('Invalid initials!');
+                } else if (!response.ok) {
+                    throw new Error(response.json().message);
+                }
+
+                return response;
+            })
             .then(response => response.json())
             .then(j => {
                 this.setState({
                     leaderboard: j.leaderboard,
                     lastScore: j.new_score,
                 })
-            })
-            .catch(response => { console.log(response); });
+            });
     }
 
     render() {
