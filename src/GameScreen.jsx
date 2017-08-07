@@ -223,8 +223,8 @@ class GameScreen extends Component {
     render() {
         const TimeRemaining = (props) => {
             let color;
-            if (props.timeRemaining < 16000) color = colours.amber;
-            if (props.timeRemaining < 6000) color = colours.red;
+            if (props.timeRemaining < 31000) color = colours.amber;
+            if (props.timeRemaining < 11000) color = colours.red;
 
             return <span className="time-remaining" style={{color}}>
                 {Math.max(0, Math.floor(props.timeRemaining / 1000))}

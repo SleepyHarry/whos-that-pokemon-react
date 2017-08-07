@@ -7,8 +7,8 @@ class ClockBar extends Component {
     render() {
         const pct = (100 * this.props.timeRemaining / this.props.maxTime);
         let background = colours.green;
-        if (this.props.timeRemaining < 16000) background = colours.amber;
-        if (this.props.timeRemaining < 6000) background = colours.red;
+        if (this.props.timeRemaining < 31000) background = colours.amber;
+        if (this.props.timeRemaining < 11000) background = colours.red;
 
         return <div
             style={{
