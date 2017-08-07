@@ -303,7 +303,7 @@ class GameScreen extends Component {
         const timeRemaining = GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME);
 
         return <div id="game-screen" className={this.state.phase === phases.GAME ? "in-game" : ""}>
-            <WtpTitle width={697} />
+            <WtpTitle size="small" />
             {body}
             <Col xs={3} style={{float: "right"}}>
                 <div className="centre-content">

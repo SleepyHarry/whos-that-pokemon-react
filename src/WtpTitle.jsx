@@ -5,19 +5,19 @@ import PropTypes from "prop-types";
 const WtpTitle = (props) => <div className="title-container">
     <img
         style={{
-            width: props.width,
-            margin: "0 auto",
+            width: props.size === "small" ? 583 : 800,
+            margin: props.size === "small" ? "0 57px" : "0 auto",
         }}
         src="/title.png"
     />
 </div>;
 
 WtpTitle.propTypes = {
-    width: PropTypes.number,
+    size: PropTypes.oneOf(["small", "normal"]),
 };
 
 WtpTitle.defaultProps = {
-    width: 800,
+    size: "normal",
 };
 
 export default WtpTitle;
