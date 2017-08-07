@@ -13,7 +13,7 @@ class InitialsInput extends Component {
     }
 
     onChange(e) {
-        e.target.value = e.target.value.slice(0, 3).toUpperCase();
+        e.target.value = e.target.value.slice(0, 3).toUpperCase().replace(" ", "");
 
         this.setState({
             value: e.target.value,
