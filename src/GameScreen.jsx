@@ -250,7 +250,7 @@ class GameScreen extends Component {
                                 zoom={6}
                             />}
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={4} xsOffset={1}>
                         <FormGroup>
                             <FormControl
                                 key="guess-input"
