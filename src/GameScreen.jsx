@@ -242,7 +242,7 @@ class GameScreen extends Component {
                 break;
             case phases.GAME:
                 body = <div>
-                    <Col xs={9}>
+                    <Col>
                         {this.state.loading ? null :
                             <Pokemon
                                 {...this.state.pokemon}
@@ -302,8 +302,9 @@ class GameScreen extends Component {
 
         const timeRemaining = GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME);
 
-        return <div>
-            <WtpTitle/>
+        return <div id="game-screen" className={this.state.phase === phases.GAME ? "in-game" : ""}>
+            <WtpTitle width={697} />
+            {body}
             <Col xs={3} style={{float: "right"}}>
                 <div className="centre-content">
                     <TimeRemaining
@@ -323,7 +324,6 @@ class GameScreen extends Component {
                     <GuessHistory guesses={this.state.guessHistory}/>
                 </div>
             </Col>
-            {body}
         </div>;
     }
 }

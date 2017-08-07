@@ -14,6 +14,16 @@
     flex-direction: column;  /* weird stretching if direction is row */
 }
 
+#game-screen {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 372px;
+}
+#game-screen.in-game {
+    height: 707px;
+}
+
 .mode-revealing {
     cursor: zoom-in;
 }
