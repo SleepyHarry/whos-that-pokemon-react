@@ -7,6 +7,7 @@
     height: 293px;
     align-items: center;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .title-container {
@@ -22,6 +23,14 @@
 }
 #game-screen.in-game {
     height: 707px;
+}
+#game-screen.ended {
+    height: 670px;
+}
+
+#game-done {
+    justify-content: space-between;
+    height: 604px;
 }
 
 .mode-revealing {

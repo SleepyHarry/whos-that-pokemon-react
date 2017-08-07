@@ -281,8 +281,9 @@ class GameScreen extends Component {
                 clearInterval(this.tickTimerID);
 
                 body = <div>
-                    <Col className="centre-content main-content">
-                        <h1>TIME'S UP!</h1>
+                    <Col id="game-done" className="centre-content main-content">
+                        <div className="spacer" />
+                        <h1 style={{color: colours.red}}>TIME UP!</h1>
                     {/*</Col>*/}
                     {/*<Col xs={4}>*/}
                         <FormGroup>
@@ -302,7 +303,12 @@ class GameScreen extends Component {
 
         const timeRemaining = GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME);
 
-        return <div id="game-screen" className={this.state.phase === phases.GAME ? "in-game" : ""}>
+        const className = {
+            [phases.GAME]: "in-game",
+            [phases.DONE]: "ended",
+        }[this.state.phase] || "";
+
+        return <div id="game-screen" className={className}>
             <WtpTitle size="small" />
             {body}
             <Col xs={3} style={{float: "right"}}>

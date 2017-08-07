@@ -5,7 +5,7 @@ import colours from "./colours";
 import Score from "./Score";
 
 
-const HISTORY_LIMIT = 8;
+const HISTORY_LIMIT = 10;
 
 class GuessHistory extends Component {
 
