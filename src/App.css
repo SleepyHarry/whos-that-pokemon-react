@@ -19,13 +19,13 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 372px;
+    height: 411px;
 }
 #game-screen.in-game {
-    height: 707px;
+    height: 746px;
 }
 #game-screen.ended {
-    height: 670px;
+    height: 722px;
 }
 
 #game-done {
@@ -149,7 +149,7 @@
 
 .time-remaining {
     margin: 0 auto;
-    font-size: 72px;
+    font-size: 96px;
 }
 
 .guess-history-element {

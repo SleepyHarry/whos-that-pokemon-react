@@ -6,7 +6,7 @@ const WtpTitle = (props) => <div className="title-container">
     <img
         style={{
             width: props.size === "small" ? 583 : 800,
-            margin: props.size === "small" ? "0 57px" : "0 auto",
+            margin: props.size === "small" ? "26px 57px" : "0 auto",
         }}
         src="/title.png"
     />
