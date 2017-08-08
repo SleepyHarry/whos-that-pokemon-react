@@ -6,6 +6,7 @@ import names from "./names.json";
 import StartScreen from "./StartScreen";
 import GameScreen from "./GameScreen";
 import GenSelectScreen from "./GenSelectScreen";
+import WtpTitle from "./WtpTitle";
 
 const screens = {
     LOADING: Symbol("loading screen"),
@@ -96,7 +97,12 @@ class App extends Component {
 
         switch (this.state.screen) {
             case screens.LOADING:
-                ActiveScreen = (props) => <h1>Loading!</h1>;
+                ActiveScreen = (props) => <div>
+                    <WtpTitle/>
+                    <div className="centre-content main-content">
+                        <h1>Loading!</h1>
+                    </div>
+                </div>;
                 break;
             case screens.START:
                 ActiveScreen = StartScreen;
