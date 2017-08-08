@@ -1,3 +1,196 @@
+.container {
+    width: 960px!important;
+    margin: 20px auto;
+}
+
+.main-content {
+    height: 380px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;  /* weird stretching if direction is row */
+}
+
+#game-screen {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 498px;
+}
+#game-screen.in-game {
+    height: 746px;
+}
+#game-screen.ended {
+    height: 722px;
+}
+
+#game-done {
+    justify-content: space-between;
+    height: 604px;
+}
+
 .mode-revealing {
     cursor: zoom-in;
+}
+
+.distinguished {
+    color: firebrick;
+}
+
+.padding {
+    color: darkgrey;
+}
+
+.distinguished .padding {
+    color: #ce777a;
+}
+
+.centre-content {
+    display: flex;
+    justify-content: center;
+}
+
+.spaced-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.arcade-button {
+    border-color: transparent;
+    background: transparent;
+}
+.arcade-button:hover {
+    border-color: transparent;
+    background: transparent;
+    transform: scale(1.1);
+}
+.arcade-button:focus {
+    outline: none!important;
+    border-color: transparent!important;
+    background: transparent!important;
+    box-shadow: none;
+}
+.arcade-button.active {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+}
+.arcade-button.active:hover {
+    border-color: transparent;
+    background: transparent;
+}
+
+.leaderboard-gen-button,
+.leaderboard-gen-button:focus
+{
+    color: #9b9b9b;
+}
+.leaderboard-gen-button.active {
+    color: black;
+}
+
+.start-button {
+    color: #417505!important;
+    font-size: 28px;
+}
+
+.gen-choice-button-container {
+    width: 70%;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+.gen-choice-button {
+    font-size: 55px;
+}
+.gen-choice-button,
+.gen-choice-button:hover,
+.gen-choice-button:focus
+{
+    color: #9b9b9b!important;
+}
+.gen-choice-button.active {
+    color: #417505!important;
+}
+
+.score-main {
+    font-size: 34px;
+}
+
+.score-leaderboard {
+    display: inline;
+}
+
+.carousel {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 96px;  /* height of poké at zoom level 1 */
+    overflow: hidden;
+}
+
+.guess-input {
+    border: none;
+    box-shadow: none;
+}
+
+.guess-input:focus {
+    box-shadow: none;
+}
+
+.guess-input[disabled] {
+    background-color: white;
+}
+
+.time-remaining {
+    margin: 0 auto;
+    font-size: 96px;
+}
+
+.guess-history-element {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.guess-history-element canvas {
+    transform: scale(0.5);
+    margin: -25% 0;
+}
+
+.initials-input {
+}
+
+.initials-input-input {
+    position: relative;
+    font-size: 92px;
+}
+
+.initials-input .faded {
+    color: darkgrey;
+}
+
+.initials-input input {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.blink {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    0% { opacity: 0; }
+    49% { opacity: 0; }
+    50% { opacity: 1; }
+    99% { opacity: 1; }
 }

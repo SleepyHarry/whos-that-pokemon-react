@@ -1,314 +1,131 @@
 import React, {Component} from "react";
-import {Button, Checkbox, Col, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
+import {Grid} from "react-bootstrap";
 import "./App.css";
 
 import names from "./names.json";
-import Pokemon, {getFamily} from "./Pokemon";
-import StatusBox from "./StatusBox";
-import levenshtein from "./levenshtein";
-import EvoFamily from "./EvoFamily";
+import StartScreen from "./StartScreen";
+import GameScreen from "./GameScreen";
+import GenSelectScreen from "./GenSelectScreen";
 
-const points = {
-    CORRECT: 10,
-    WRONG: -0,
-    CLOSE: -0,
-    SKIP: -5,
-    REVEAL: -2,
-    GEN_CLUE: -2,
-    EVO_CLUE: -4,
-
-    START: 5,
-};
-
-const modes = {
-    GUESSING: Symbol("guessing mode"),
-    REVEALING: Symbol("revealing mode"),
+const screens = {
+    LOADING: Symbol("loading screen"),
+    START: Symbol("start screen"),
+    GAME: Symbol("game screen"),
+    GEN_CHOOSE: Symbol("generation choose screen"),
 };
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        const allGenerations = new Set(names.map(poke => poke.generation));
-        let chosenGenerations = [];
-
-        for (let gen of allGenerations) {
-            if (localStorage.getItem(`gen-${gen}`)) {
-                chosenGenerations.push(gen);
-            }
-        }
-
-        if (chosenGenerations.length === 0) {
-            // typically because this is the user's first visit
-            for (let gen of allGenerations) {
-                localStorage.setItem(`gen-${gen}`, true);
-            }
-            chosenGenerations = allGenerations;
-        }
-
-        chosenGenerations = new Set(chosenGenerations);
-
-        this.allGenerations = new Array(...allGenerations).sort();
-
         this.state = {
             loading: true,
-            mode: modes.GUESSING,
 
-            potentials: names.filter(poke => chosenGenerations.has(poke.generation)),
-            generations: chosenGenerations,
-            // pokemon: this.randPoke(),
-            hidden: true,
-            reveal: new Set(),
+            screen: screens.LOADING,
 
-            currentGuess: '',
-            points: points.START,
-            status: null,
+            generation: null,
+
+            leaderboard: [],
+            lastScore: null,
         };
-
-        this.randPoke = this.randPoke.bind(this);
     }
 
     componentDidMount() {
+        fetch('/api/leaderboard/')
+            .then(response => response.json())
+            .then((j) => {
+                this.setState({
+                    loading: false,
+                    screen: screens.START,
+                    leaderboard: j.leaderboard,
+                });
+            });
+    }
+
+    onScreenSelect(screen, state) {
         this.setState({
-            pokemon: this.randPoke(),
-            loading: false,
+            screen,
+            ...state,  // to pass extra info, like generation choice
         });
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        if (nextState.points < 0) {
-            // TODO: game over
-            console.log("Game over!");
-        }
-    }
-
-    skipPoke() {
-        if (this.state.points === 0) {
-            this.setState({
-                status: "forbidden",
-            });
-        } else {
-            this.setState((prevState) => ({
-                points: prevState.points + points.SKIP,
-                pokemon: this.randPoke(),
-            }));
-        }
-    }
-
-    randPokeFromPotentials(potentials) {
-        const n = potentials.length,
-            i = Math.floor(Math.random() * n),
-            newPoke = potentials[i];
-
-        potentials = [
-            ...potentials.slice(0, i),
-            ...potentials.slice(i + 1, n),
-        ];
-
-        return {
-            newPoke,
-            potentials,
+    onScoreSubmit(score) {
+        // score = {initials, points}
+        const newScore = {
+            ...score,
+            generation: this.state.generation,
         };
-    }
 
-    randPoke() {
-        // TODO: What if empty
-        let {newPoke, potentials} = this.randPokeFromPotentials(this.state.potentials);
-
-        this.setState({potentials});
-        return newPoke;
-    }
-
-    onChange(e) {
-        this.setState({
-            currentGuess: e.target.value,
-            status: null,
-        });
-    }
-
-    onGenerationSelect(gen, e) {
-        const checked = e.target.checked;  // to avoid persisting the event
-
-        this.setState((prevState) => {
-            let generations = prevState.generations;
-
-            if (checked) {
-                generations.add(gen);
-                localStorage.setItem(`gen-${gen}`, true);
-            } else {
-                generations.delete(gen);
-                localStorage.removeItem(`gen-${gen}`);
-            }
-
-            let fullPotentials = names
-                .filter(poke => generations.has(poke.generation));
-
-            let {newPoke, potentials} = this.randPokeFromPotentials(fullPotentials);
-
-            return {
-                generations,
-                potentials,
-                pokemon: newPoke,
-                reveal: new Set(),
-            };
-        });
-    }
-
-    clean(s) {
-        return s.toLowerCase().replace(/[^a-z]/g, '');
-    }
-
-    onSubmit() {
-        const guess = this.clean(this.state.currentGuess);
-        const target = this.clean(this.state.pokemon.name);
-
-        if (guess === target) {
-            this.setState((prevState) => ({
-                points: prevState.points + points.CORRECT,
-                hidden: false,
-                reveal: new Set(),
-                status: "correct",
-            }));
-
-            setTimeout(
-                () => {
-                    this.setState({
-                        hidden: true,
-                        currentGuess: '',
-                        pokemon: this.randPoke(),
-                        status: null,
-                    });
-                    this.guessInput.focus();
+        return fetch(
+            '/api/leaderboard/',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                 },
-                2000,
-            );
-        } else if (levenshtein(guess, target) <= 2) {
-            this.setState((prevState) => ({
-                status: "close",
-                points: prevState.points + points.CLOSE,
-            }));
-        } else {
-            this.setState((prevState) => ({
-                status: "nope",
-                points: prevState.points + points.WRONG,
-            }));
-        }
-    }
+                body: JSON.stringify(newScore),
+            },
+        )
+            .then(response => {
+                if (response.status === 400) {
+                    // NB: This should only happen if the user is trying
+                    //     to get around the client-side validation on the
+                    //     initials input, so not having a visual brick is
+                    //     fine.
 
-    onKeyUp(e) {
-        if (e.key === "Enter") {
-            this.onSubmit();
-        }
-    }
-
-    onClickToReveal({x, y}) {
-        if (!(this.state.mode === modes.REVEALING)) return;
-
-        // TODO: Dynamic radius (based on difficulty? increasing? based on points spent?)
-        const radius = 5;
-
-        if (this.state.points + points.REVEAL < 0) {
-            this.setState({
-                status: "forbidden",
-            });
-        } else {
-            this.setState((prevState) => {
-                for (let xDiff=-radius; xDiff<=radius; xDiff++) {
-                    for (let yDiff=-radius; yDiff<=radius; yDiff++) {
-                        if (Math.sqrt(xDiff**2 + yDiff**2) <= radius) {
-                            prevState.reveal.add([x + xDiff, y + yDiff]+'');
-                        }
-                    }
+                    // currently only reason for a 400
+                    throw new Error('Invalid initials!');
+                } else if (!response.ok) {
+                    throw new Error(response.json().message);
                 }
 
-                return {
-                    reveal: prevState.reveal,  // updated inplace by above
-                    points: prevState.points + points.REVEAL,
-                };
+                return response;
+            })
+            .then(response => response.json())
+            .then(j => {
+                this.setState({
+                    leaderboard: j.leaderboard,
+                    lastScore: j.new_score,
+                })
             });
-        }
-    }
-
-    changeModes(e) {
-        this.setState({
-            mode: e.target.checked ? modes.REVEALING : modes.GUESSING,
-        });
     }
 
     render() {
+        let ActiveScreen;
+
+        switch (this.state.screen) {
+            case screens.LOADING:
+                ActiveScreen = (props) => <h1>Loading!</h1>;
+                break;
+            case screens.START:
+                ActiveScreen = StartScreen;
+                break;
+            case screens.GEN_CHOOSE:
+                ActiveScreen = GenSelectScreen;
+                break;
+            case screens.GAME:
+                ActiveScreen = GameScreen;
+                break;
+            default:
+                ActiveScreen = (props) => <h1>Something has gone horribly wrong!</h1>;
+                break;
+        }
+
         return (
             <Grid>
-                <Row>
-                    <Col xs={3}>
-                        <Button onClick={this.skipPoke.bind(this)}>
-                            {`Skip (cost: ${Math.abs(points.SKIP)} points)`}
-                        </Button>
-                        <Checkbox onClick={this.changeModes.bind(this)}>
-                            {`Reveal mode (cost: ${Math.abs(points.REVEAL)} points per click)`}
-                        </Checkbox>
-                    </Col>
-                    <Col xs={3}>
-                        <h2>{this.state.points} point{this.state.points === 1 ? "": "s"}!</h2>
-                    </Col>
-                    <Col xs={4}>
-                        <FormGroup validationState={null}>
-                            <FormControl
-                                type="text"
-                                value={this.state.currentGuess}
-                                placeholder="Your guess"
-                                inputRef={(input) => { this.guessInput = input; }}
-                                onChange={this.onChange.bind(this)}
-                                onKeyUp={this.onKeyUp.bind(this)}
-                                disabled={!this.state.hidden}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col xs={2}>
-                        <Button
-                            type="submit"
-                            onClick={this.onSubmit.bind(this)}
-                        >
-                            Guess
-                        </Button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={8} className={`mode-${this.state.mode === modes.REVEALING ? "revealing" : "guessing"}`}>
-                        {this.state.loading ? null :
-                        <Pokemon
-                            {...this.state.pokemon}
-                            hidden={this.state.hidden}
-                            zoom={6}
-                            reveal={this.state.reveal}
-                            onClick={this.onClickToReveal.bind(this)}
-                        />}
-                    </Col>
-                    <Col xs={2}>
-                        {this.state.loading ? null :
-                            <EvoFamily seed={this.state.pokemon}/>
-                        }
-                    </Col>
-                    <Col xs={2}>
-                        {this.state.status ?
-                        <StatusBox option={this.state.status}/> :
-                        null}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={12}>
-                        <FormGroup>
-                            {this.allGenerations.map(gen =>
-                            <Checkbox
-                                key={gen}
-                                inline
-                                checked={this.state.generations.has(gen)}
-                                onChange={this.onGenerationSelect.bind(this, gen)}
-                            >
-                                Gen {gen}
-                            </Checkbox>)}
-                        </FormGroup>
-                    </Col>
-                </Row>
+                <ActiveScreen
+                    goToScreen={this.onScreenSelect.bind(this)}
+                    screens={screens}
+
+                    pokes={this.state.generation === null ?
+                        names :
+                        names.filter(poke => poke.generation === this.state.generation)
+                    }
+                    lastScore={this.state.lastScore}
+                    submitScore={this.onScoreSubmit.bind(this)}
+                    leaderboard={this.state.leaderboard}
+                />
             </Grid>
         );
     }
