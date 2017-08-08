@@ -24,7 +24,7 @@ class GuessInput extends Component {
                         className="guess-input"
                         type="text"
                         value={this.props.currentGuess}
-                        placeholder="Your guess"
+                        placeholder="Start typing!"
                         inputRef={(input) => {
                             this.guessInput = input;
                         }}
