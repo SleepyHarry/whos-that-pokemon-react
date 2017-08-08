@@ -10,6 +10,10 @@ class InitialsInput extends Component {
         this.state = {
             value: '',
         };
+
+        setTimeout(() => {
+            this.input.focus();
+        }, 1000);
     }
 
     onChange(e) {
