@@ -17,12 +17,24 @@ class Carousel extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        this.resetTimer();
         this.setState({
             pokes: this.shufflePokes(nextProps.pokes),
         });
     }
 
     componentDidMount() {
+        this.resetTimer();
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.tickTimerID);
+    }
+
+    resetTimer() {
+        // safe to call if `this.tickTimerID` is undefined
+        clearInterval(this.tickTimerID);
+
         this.tickTimerID = setInterval(
             () => {
                 this.setState((prevState) => ({
@@ -31,10 +43,6 @@ class Carousel extends Component {
             },
             5000,
         );
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.tickTimerID);
     }
 
     shufflePokes(pokes) {
