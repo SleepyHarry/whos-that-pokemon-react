@@ -11,7 +11,7 @@ import ClockBar from "./ClockBar";
 import GuessHistory from "./GuessHistory";
 import colours from "./colours";
 import InitialsInput from "./InitialsInput";
-import ArcadeButton from "./ArcadeButton";
+import GuessInput from "./GuessInput";
 
 
 const points = {
@@ -80,7 +80,6 @@ class GameScreen extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevState.phase === phases.PREP && this.state.phase === phases.GAME) {
             // just started the game
-            this.guessInput.focus();
         }
     }
 
@@ -194,7 +193,6 @@ class GameScreen extends Component {
                     pokemon: this.randPoke(),
                     // status: null,
                 });
-                this.guessInput.focus();
             },
             500,
         );
@@ -254,31 +252,13 @@ class GameScreen extends Component {
                                 zoom={6}
                             />}
                     </Col>
-                    <Col xs={4} xsOffset={1}>
-                        <FormGroup>
-                            <FormControl
-                                key="guess-input"
-                                className="guess-input"
-                                type="text"
-                                value={this.state.currentGuess}
-                                placeholder="Your guess"
-                                inputRef={(input) => {
-                                    this.guessInput = input;
-                                }}
-                                onChange={this.onPokeChange.bind(this)}
-                                onKeyUp={this.onPokeKeyUp.bind(this)}
-                                disabled={!this.state.hidden}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col xs={2}>
-                        <ArcadeButton
-                            type="submit"
-                            onClick={this.onPokeSubmit.bind(this)}
-                        >
-                            Guess
-                        </ArcadeButton>
-                    </Col>
+                    <GuessInput
+                        currentGuess={this.state.currentGuess}
+                        disabled={!this.state.hidden}
+                        onChange={this.onPokeChange.bind(this)}
+                        onKeyUp={this.onPokeKeyUp.bind(this)}
+                        onSubmit={this.onPokeSubmit.bind(this)}
+                    />
                 </div>;
                 break;
             case phases.DONE:
