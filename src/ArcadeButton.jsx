@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import PropTypes from "prop-types";
 import {Button} from "react-bootstrap";
 
 
@@ -17,6 +16,6 @@ class ArcadeButton extends Component {
     }
 }
 
-ArcadeButton.propTypes = {};
+ArcadeButton.propTypes = Button.propTypes;
 
 export default ArcadeButton;
