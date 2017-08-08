@@ -8,7 +8,7 @@ const WtpTitle = (props) => <div className="title-container">
             width: props.size === "small" ? 583 : 800,
             margin: props.size === "small" ? "26px 57px" : "0 auto",
         }}
-        src="/title.png"
+        src="/title@2x.png"
     />
 </div>;
 
