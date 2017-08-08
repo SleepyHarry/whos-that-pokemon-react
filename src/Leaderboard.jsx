@@ -53,7 +53,10 @@ class Leaderboard extends Component {
     }
 
     onSelectGen(generation) {
-        this.setState({generation});
+        this.setState({
+            generation,
+            freeze: true,
+        });
     }
 
     render() {
