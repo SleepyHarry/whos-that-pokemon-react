@@ -9,6 +9,7 @@ const WtpTitle = (props) => <div className="title-container">
             margin: props.size === "small" ? "26px 57px" : "0 auto",
         }}
         src="/title@2x.png"
+        alt="Who's the Pokémon?"
     />
 </div>;
 
