@@ -8,18 +8,30 @@ class Leaderboard extends Component {
     constructor(props) {
         super(props);
 
+        // Leaderboard is effectively rebuilt each time the leaderboard data
+        // changes, so this logic, while it would normally go in componentWillReceiveProps,
+        // should go here, as technically the props never update, the whole component
+        // gets remade
+        let partialState;
+        if (props.lastScore) {
+            partialState = {
+                generation: props.lastScore.generation,
+                freeze: true,
+            };
+        } else {
+            partialState = {
+                freeze: false,
+            };
+        }
+
         this.state = {
             generations: [],
             generation: 1,
-        };
-    }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.lastScore) {
-            this.setState({
-                generation: nextProps.lastScore.generation,
-            });
-        }
+            freeze: false,  // stops the leaderboard "rotating"
+
+            ...partialState,
+        };
     }
 
     componentDidMount() {
@@ -28,9 +40,11 @@ class Leaderboard extends Component {
         });
 
         this.timerID = setInterval(() => {
-            this.setState((prevState) => ({
-                generation: (prevState.generation % this.state.generations.length) + 1,  // mod first because 1-indexed gens
-            }));
+            if (!this.state.freeze) {
+                this.setState((prevState) => ({
+                    generation: (prevState.generation % this.state.generations.length) + 1,  // mod first because 1-indexed gens
+                }));
+            }
         }, 10000);
     }
 
