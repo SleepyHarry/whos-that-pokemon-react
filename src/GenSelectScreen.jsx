@@ -28,15 +28,6 @@ class GenSelectScreen extends Component {
         this.setState({chosenGen: gen});
     }
 
-    onClick() {
-        this.props.goToScreen(
-            this.props.screens.GAME,
-            {
-                generation: this.state.chosenGen,
-            },
-        );
-    }
-
     render() {
         return <div>
             <WtpTitle/>
@@ -69,13 +60,30 @@ class GenSelectScreen extends Component {
                 </div>
                 <br/>
                 <br/>
-                <div className="centre-content">
+                <div className="spaced-content">
+                    <ArcadeButton
+                        onClick={() => {this.props.goToScreen(this.props.screens.START)}}
+                    >
+                        &lt; BACK
+                    </ArcadeButton>
                     <ArcadeButton
                         className="start-button"
-                        onClick={this.onClick.bind(this)}
+                        onClick={() => {this.props.goToScreen(
+                            this.props.screens.GAME,
+                            {
+                                generation: this.state.chosenGen,
+                            },
+                        )}}
                         disabled={this.state.chosenGen === null}
                     >
                         START
+                    </ArcadeButton>
+                    {/* just for spacing */}
+                    <ArcadeButton
+                        onClick={() => {}}
+                        style={{opacity: 0}}
+                    >
+                        &lt; BACK
                     </ArcadeButton>
                 </div>
             </div>
