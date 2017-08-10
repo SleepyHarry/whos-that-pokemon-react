@@ -169,33 +169,41 @@ class GameScreen extends Component {
             additionalPoints = this.calcScore(correct ? 1 : points.CLOSE_MODIFIER);
         }
 
-        this.setState((prevState) => ({
-            points: prevState.points + additionalPoints,
-            hidden: false,
-            lastGuessTime: Date.now(),
-            guessHistory: [
-                {
-                    pokemon: this.state.pokemon,
-                    points: additionalPoints,
-                    correct,
-                    close,
-                },
-                ...prevState.guessHistory,
-            ],
-            // status: "correct",
-        }));
+        // avoids multi-guesses of same poké
+        const alreadyGuessed = this.state.guessHistory.filter(
+            entry => entry.pokemon.number === this.state.pokemon.number
+        ).length > 0;
 
-        setTimeout(
-            () => {
-                this.setState({
-                    hidden: true,
-                    currentGuess: '',
-                    pokemon: this.randPoke(),
-                    // status: null,
-                });
-            },
-            500,
-        );
+        console.log(this.state.pokemon, this.state.guessHistory, alreadyGuessed);
+
+        if (!alreadyGuessed) {
+            this.setState((prevState) => ({
+                points: prevState.points + additionalPoints,
+                hidden: false,
+                lastGuessTime: Date.now(),
+                guessHistory: [
+                    {
+                        pokemon: this.state.pokemon,
+                        points: additionalPoints,
+                        correct,
+                        close,
+                    },
+                    ...prevState.guessHistory,
+                ],
+            }));
+
+            setTimeout(
+                () => {
+                    this.setState({
+                        hidden: true,
+                        currentGuess: '',
+                        pokemon: this.randPoke(),
+                        // status: null,
+                    });
+                },
+                500,
+            );
+        }
     }
 
     onPokeKeyUp(e) {
