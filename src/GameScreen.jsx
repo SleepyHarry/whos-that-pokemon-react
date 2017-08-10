@@ -86,6 +86,7 @@ class GameScreen extends Component {
 
     componentWillUnmount() {
         clearInterval(this.tickTimerID);
+        clearTimeout(this.statusTimeout);
     }
 
     tick() {
@@ -222,7 +223,8 @@ class GameScreen extends Component {
             );
 
             // hide the status message after a delay
-            setTimeout(
+            clearTimeout(this.statusTimeout);
+            this.statusTimeout = setTimeout(
                 () => {
                     this.setState({status: null});
                 },
