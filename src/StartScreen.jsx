@@ -22,7 +22,7 @@ class StartScreen extends Component {
                         className="instructions-button"
                         onClick={() => {this.props.goToScreen(this.props.screens.INSTRUCTIONS)}}
                     >
-                        INSTRUCTIONS
+                        HOW TO PLAY
                     </ArcadeButton>
                 </Col>
                 <Col xs={4}>

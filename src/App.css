@@ -62,6 +62,7 @@
 .arcade-button {
     border-color: transparent;
     background: transparent;
+    text-transform: uppercase;
 }
 .arcade-button:hover {
     border-color: transparent;
@@ -100,6 +101,16 @@
 
 .instructions-button {
     font-size: 28px;
+}
+
+.instructions {
+    margin: 2em 6em;
+}
+
+.instructions-button-group {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 calc(6em - 12px);  /* 6em to match instructions margin, 12px to take of button padding */
 }
 
 .gen-choice-button-container {
