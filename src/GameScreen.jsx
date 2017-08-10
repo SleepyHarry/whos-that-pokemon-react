@@ -54,6 +54,7 @@ class GameScreen extends Component {
             elapsedTime: 0,
             lastGuessTime: null,
             guessHistory: [],
+            status: null,
 
             initials: '',
         };
@@ -173,9 +174,25 @@ class GameScreen extends Component {
             entry => entry.pokemon.number === this.state.pokemon.number
         ).length > 0;
 
-        console.log(this.state.pokemon, this.state.guessHistory, alreadyGuessed);
-
         if (!alreadyGuessed) {
+            let status;
+            if (correct) {
+                status = {
+                    color: colours.green,
+                    wording: "Correct!",
+                };
+            } else if (close) {
+                status = {
+                    color: colours.amber,
+                    wording: `Almost! It's spelt "${this.state.pokemon.name}"`,
+                }
+            } else {
+                status = {
+                    color: colours.red,
+                    wording: `Unlucky! It was a "${this.state.pokemon.name}"`,
+                };
+            }
+
             this.setState((prevState) => ({
                 points: prevState.points + additionalPoints,
                 hidden: false,
@@ -189,8 +206,10 @@ class GameScreen extends Component {
                     },
                     ...prevState.guessHistory,
                 ],
+                status,
             }));
 
+            // move on to next poké after a delay
             setTimeout(
                 () => {
                     this.setState({
@@ -200,6 +219,14 @@ class GameScreen extends Component {
                     });
                 },
                 500,
+            );
+
+            // hide the status message after a delay
+            setTimeout(
+                () => {
+                    this.setState({status: null});
+                },
+                correct ? 500 : 5000,
             );
         }
     }
@@ -249,22 +276,15 @@ class GameScreen extends Component {
                 </div>;
                 break;
             case phases.GAME:
-                let pokeNameColour = colours.red;
-                if (this.state.guessHistory.length > 0) {
-                    const lastGuess = this.state.guessHistory[0];
-                    if (lastGuess.correct) { pokeNameColour = colours.green; }
-                    else if (lastGuess.close) { pokeNameColour = colours.amber; }
-                }
-
                 body = <div>
                     <Col>
-                        {!this.state.hidden && <span
-                            className="poke-name"
+                        {this.state.status && <span
+                            className="status"
                             style={{
-                                color: pokeNameColour,
+                                color: this.state.status.color,
                             }}
                         >
-                            {this.state.pokemon.name}
+                            {this.state.status.wording}
                         </span>}
                         {this.state.loading ? null :
                             <Pokemon
