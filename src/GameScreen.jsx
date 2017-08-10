@@ -228,7 +228,7 @@ class GameScreen extends Component {
                 () => {
                     this.setState({status: null});
                 },
-                correct ? 500 : 5000,
+                correct ? 1000 : 5000,
             );
         }
     }
