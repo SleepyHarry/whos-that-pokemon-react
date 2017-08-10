@@ -7,10 +7,12 @@ import StartScreen from "./StartScreen";
 import GameScreen from "./GameScreen";
 import GenSelectScreen from "./GenSelectScreen";
 import WtpTitle from "./WtpTitle";
+import InstructionsScreen from "./InstructionsScreen";
 
 const screens = {
     LOADING: Symbol("loading screen"),
     START: Symbol("start screen"),
+    INSTRUCTIONS: Symbol("instructions screen"),
     GAME: Symbol("game screen"),
     GEN_CHOOSE: Symbol("generation choose screen"),
 };
@@ -106,6 +108,9 @@ class App extends Component {
                 break;
             case screens.START:
                 ActiveScreen = StartScreen;
+                break;
+            case screens.INSTRUCTIONS:
+                ActiveScreen = InstructionsScreen;
                 break;
             case screens.GEN_CHOOSE:
                 ActiveScreen = GenSelectScreen;

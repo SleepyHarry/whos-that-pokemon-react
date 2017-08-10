@@ -18,6 +18,12 @@ class StartScreen extends Component {
                     >
                         START
                     </ArcadeButton>
+                    <ArcadeButton
+                        className="instructions-button"
+                        onClick={() => {this.props.goToScreen(this.props.screens.INSTRUCTIONS)}}
+                    >
+                        INSTRUCTIONS
+                    </ArcadeButton>
                 </Col>
                 <Col xs={4}>
                     <Leaderboard
