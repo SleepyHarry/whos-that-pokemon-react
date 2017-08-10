@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Col, Row} from "react-bootstrap";
 import WtpTitle from "./WtpTitle";
 import ArcadeButton from "./ArcadeButton";
 
@@ -20,12 +19,12 @@ class InstructionsScreen extends Component {
                 <ArcadeButton
                     onClick={() => {this.props.goToScreen(this.props.screens.START)}}
                 >
-                    BACK
+                    &lt; BACK
                 </ArcadeButton>
                 <ArcadeButton
                     onClick={() => {this.props.goToScreen(this.props.screens.GEN_CHOOSE)}}
                 >
-                    START
+                    START &gt;
                 </ArcadeButton>
             </div>
         </div>
