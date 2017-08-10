@@ -149,6 +149,15 @@
     overflow: hidden;
 }
 
+.poke-name {
+    position: fixed;
+    width: 576px;
+    margin-top: 1em;
+    text-align: center;
+    font-size: 28px;
+    text-transform: uppercase;
+}
+
 .guess-input {
     border: none;
     box-shadow: none;

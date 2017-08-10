@@ -141,7 +141,6 @@ class GameScreen extends Component {
     onPokeChange(e) {
         this.setState({
             currentGuess: e.target.value,
-            // status: null,
         });
     }
 
@@ -198,7 +197,6 @@ class GameScreen extends Component {
                         hidden: true,
                         currentGuess: '',
                         pokemon: this.randPoke(),
-                        // status: null,
                     });
                 },
                 500,
@@ -251,8 +249,23 @@ class GameScreen extends Component {
                 </div>;
                 break;
             case phases.GAME:
+                let pokeNameColour = colours.red;
+                if (this.state.guessHistory.length > 0) {
+                    const lastGuess = this.state.guessHistory[0];
+                    if (lastGuess.correct) { pokeNameColour = colours.green; }
+                    else if (lastGuess.close) { pokeNameColour = colours.amber; }
+                }
+
                 body = <div>
                     <Col>
+                        {!this.state.hidden && <span
+                            className="poke-name"
+                            style={{
+                                color: pokeNameColour,
+                            }}
+                        >
+                            {this.state.pokemon.name}
+                        </span>}
                         {this.state.loading ? null :
                             <Pokemon
                                 {...this.state.pokemon}
