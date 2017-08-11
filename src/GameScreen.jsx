@@ -181,16 +181,19 @@ class GameScreen extends Component {
                 status = {
                     color: colours.green,
                     wording: "Correct!",
+                    bgUrl: "/feedback/correct.png",
                 };
             } else if (close) {
                 status = {
                     color: colours.amber,
                     wording: `Almost! It's spelt "${this.state.pokemon.name}"`,
+                    bgUrl: "/feedback/almost.png",
                 }
             } else {
                 status = {
                     color: colours.red,
                     wording: `Unlucky! It was a "${this.state.pokemon.name}"`,
+                    bgUrl: "/feedback/wrong.png",
                 };
             }
 
@@ -280,14 +283,18 @@ class GameScreen extends Component {
             case phases.GAME:
                 body = <div>
                     <Col>
-                        {this.state.status && <span
-                            className="status"
-                            style={{
-                                color: this.state.status.color,
-                            }}
-                        >
-                            {this.state.status.wording}
-                        </span>}
+                        {this.state.status && <div className="status">
+                            <span
+                                style={{
+                                    color: this.state.status.color,
+                                }}
+                            >
+                                {this.state.status.wording}
+                            </span>
+                            <img
+                                src={this.state.status.bgUrl}
+                            />
+                        </div>}
                         {this.state.loading ? null :
                             <Pokemon
                                 {...this.state.pokemon}

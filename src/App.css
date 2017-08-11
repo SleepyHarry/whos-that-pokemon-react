@@ -149,13 +149,17 @@
     overflow: hidden;
 }
 
-.status {
+.status span {
     position: fixed;
     width: 576px;
     margin-top: 1em;
     text-align: center;
     font-size: 28px;
     text-transform: uppercase;
+}
+.status img {
+    position: fixed;
+    z-index: -1;
 }
 
 .guess-input {
