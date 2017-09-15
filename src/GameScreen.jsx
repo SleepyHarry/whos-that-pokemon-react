@@ -220,18 +220,10 @@ class GameScreen extends Component {
                         hidden: true,
                         currentGuess: '',
                         pokemon: this.randPoke(),
+                        status: null,
                     });
                 },
-                500,
-            );
-
-            // hide the status message after a delay
-            clearTimeout(this.statusTimeout);
-            this.statusTimeout = setTimeout(
-                () => {
-                    this.setState({status: null});
-                },
-                correct ? 1000 : 5000,
+                correct ? 500 : 1500,
             );
         }
     }
