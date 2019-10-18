@@ -330,6 +330,7 @@ class GameScreen extends Component {
         const timeRemaining = GAME_TIME - Math.max(0, this.state.elapsedTime - COUNTDOWN_TIME);
 
         const className = {
+            [phases.PREP]: "prep",
             [phases.GAME]: "in-game",
             [phases.DONE]: "ended",
         }[this.state.phase] || "";

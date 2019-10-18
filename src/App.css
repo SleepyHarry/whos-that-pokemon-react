@@ -17,9 +17,12 @@
 
 #game-screen {
     display: flex;
-    flex-direction: column;
+    justify-content: space-around;
     flex-wrap: wrap;
     height: 498px;
+}
+#game-screen.prep {
+    flex-direction: column;
 }
 #game-screen.in-game {
     height: 746px;
@@ -221,4 +224,8 @@
     49% { opacity: 0; }
     50% { opacity: 1; }
     99% { opacity: 1; }
+}
+
+.row {
+    justify-content: space-around;
 }
